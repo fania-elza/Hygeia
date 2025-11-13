@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('content')
 
@@ -26,14 +26,13 @@
     </div>
 </section>
 
-<!-- 🔹 SECTION: Search & Tambah -->
-<div class="flex items-center justify-between w-full mx-auto p-4 mt-6 bg-white rounded-xl border border-gray-200 shadow-sm">
+<!-- 🔹 Search & Filter Section -->
+<div class="flex items-center justify-between w-full mx-auto p-2 bg-white rounded-xl border border-gray-200 shadow-sm">
     <div class="flex items-center space-x-2 w-96">
         <input 
             type="text" 
-            placeholder="Cari kategori..." 
-            class="w-full p-2 border border-gray-200 rounded-lg focus:ring-0 bg-transparent text-sm text-gray-900 placeholder-gray-500"
-        >
+            placeholder="Search orders......" 
+            class="w-full p-2 border border-gray-200 rounded-lg focus:ring-0 bg-transparent text-sm text-gray-900 placeholder-gray-500">
         <button type="button" class="flex items-center justify-center bg-teal-500 hover:bg-teal-600 text-white text-sm font-medium rounded-lg px-4 py-2">
             <svg class="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
@@ -41,6 +40,13 @@
             Search
         </button>
     </div>
+
+    <button class="flex items-center justify-center flex-shrink-0 ml-2 px-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-800 hover:bg-gray-50 focus:ring-2 focus:outline-none focus:ring-blue-300">
+        <span>All Status</span>
+        <svg class="w-4 h-4 text-gray-600 ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+        </svg>
+    </button>
 </div>
 
 <!-- 🔹 SECTION: Table -->
@@ -55,7 +61,7 @@
                 <th class="border border-gray-300 px-4 py-2">Payment Method</th>
                 <th class="border border-gray-300 px-4 py-2">Status</th>
                 <th class="border border-gray-300 px-4 py-2">Payment Method</th>
-                <th class="border border-gray-300 px-4 py-2">Aktivitas</th>
+                <th class="border border-gray-300 px-4 py-2">Action</th>
             </tr>
         </thead>
         <tbody class="text-center text-gray-700">
@@ -78,8 +84,10 @@
                         class="inline-flex items-center justify-center w-8 h-8 rounded-lg 
                                 text-blue-500 hover:text-blue-600 hover:bg-blue-50 
                                 transition-colors duration-200">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32">
-                            <path fill="#3B82F6" d="M27.87 7.863L23.024 4.82l-7.89 12.566l4.843 3.04zM14.395 21.25l-.107 2.855l2.527-1.337l2.35-1.24l-4.673-2.936zM29.163 3.24L26.63 1.647a1.364 1.364 0 0 0-1.88.43l-1 1.588l4.843 3.042l1-1.586c.4-.64.21-1.483-.43-1.883zm-3.965 23.82c0 .275-.225.5-.5.5h-19a.5.5 0 0 1-.5-.5v-19a.5.5 0 0 1 .5-.5h13.244l1.884-3H5.698c-1.93 0-3.5 1.57-3.5 3.5v19c0 1.93 1.57 3.5 3.5 3.5h19c1.93 0 3.5-1.57 3.5-3.5V11.097l-3 4.776v11.19z"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 48 48"><defs><mask id="SVG544unEnd"><g fill="#1a1a1a" 
+                            stroke="#fff" stroke-linejoin="round" stroke-width="4"><path d="M24 36c11.046 0 20-12 20-12s-8.954-12-20-12S4 24 4 24s8.954 12 20 12Z"/>
+                            <path d="M24 29a5 5 0 1 0 0-10a5 5 0 0 0 0 10Z"/></g></mask></defs><path fill="#3B82F6" d="M0 0h48v48H0z" mask="url(#SVG544unEnd)"/>
+                        </svg>
                     </button>
 
                     <!-- 🔸 Tombol Hapus -->
@@ -113,8 +121,10 @@
                         class="inline-flex items-center justify-center w-8 h-8 rounded-lg 
                                 text-blue-500 hover:text-blue-600 hover:bg-blue-50 
                                 transition-colors duration-200">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32">
-                            <path fill="#3B82F6" d="M27.87 7.863L23.024 4.82l-7.89 12.566l4.843 3.04zM14.395 21.25l-.107 2.855l2.527-1.337l2.35-1.24l-4.673-2.936zM29.163 3.24L26.63 1.647a1.364 1.364 0 0 0-1.88.43l-1 1.588l4.843 3.042l1-1.586c.4-.64.21-1.483-.43-1.883zm-3.965 23.82c0 .275-.225.5-.5.5h-19a.5.5 0 0 1-.5-.5v-19a.5.5 0 0 1 .5-.5h13.244l1.884-3H5.698c-1.93 0-3.5 1.57-3.5 3.5v19c0 1.93 1.57 3.5 3.5 3.5h19c1.93 0 3.5-1.57 3.5-3.5V11.097l-3 4.776v11.19z"/></svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 48 48"><defs><mask id="SVG544unEnd"><g fill="#1a1a1a" 
+                            stroke="#fff" stroke-linejoin="round" stroke-width="4"><path d="M24 36c11.046 0 20-12 20-12s-8.954-12-20-12S4 24 4 24s8.954 12 20 12Z"/>
+                            <path d="M24 29a5 5 0 1 0 0-10a5 5 0 0 0 0 10Z"/></g></mask></defs><path fill="#3B82F6" d="M0 0h48v48H0z" mask="url(#SVG544unEnd)"/>
+                        </svg>
                     </button>
 
                     <!-- 🔸 Tombol Hapus -->

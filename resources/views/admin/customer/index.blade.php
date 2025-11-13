@@ -8,19 +8,19 @@
 
     <div class="grid grid-cols-4 gap-6 mt-6">
         <div class="bg-teal-50 border border-teal-200 rounded-lg p-4 text-center">
-            <p class="text-sm text-gray-500">Total Pelanggan</p>
+            <p class="text-sm text-gray-500">Total Customers</p>
             <h4 class="text-2xl font-bold text-teal-600">1,247</h4>
         </div>
         <div class="bg-teal-50 border border-teal-200 rounded-lg p-4 text-center">
-            <p class="text-sm text-gray-500">Kategori Aktif</p>
+            <p class="text-sm text-gray-500">Active Customers</p>
             <h4 class="text-2xl font-bold text-teal-600">3,891</h4>
         </div>
         <div class="bg-teal-50 border border-teal-200 rounded-lg p-4 text-center">
-            <p class="text-sm text-gray-500">Kategori Non-Aktif</p>
+            <p class="text-sm text-gray-500">New Registrations</p>
             <h4 class="text-2xl font-bold text-teal-600">2,156</h4>
         </div>
         <div class="bg-teal-50 border border-teal-200 rounded-lg p-4 text-center">
-            <p class="text-sm text-gray-500">Total Produk</p>
+            <p class="text-sm text-gray-500">Total Orders</p>
             <h4 class="text-2xl font-bold text-teal-600">$89,247</h4>
         </div>
     </div>
@@ -31,7 +31,7 @@
     <div class="flex items-center space-x-2 w-96">
         <input 
             type="text" 
-            placeholder="Cari kategori..." 
+            placeholder="Search customers by name or email......" 
             class="w-full p-2 border border-gray-200 rounded-lg focus:ring-0 bg-transparent text-sm text-gray-900 placeholder-gray-500"
         >
         <button type="button" class="flex items-center justify-center bg-teal-500 hover:bg-teal-600 text-white text-sm font-medium rounded-lg px-4 py-2">
@@ -49,12 +49,12 @@
     <table class="min-w-full border border-teal-200 text-left text-sm">
         <thead class="bg-teal-50 text-gray-800 text-center">
             <tr>
-                <th class="border border-gray-300 px-4 py-2">ID Pelanggan</th>
-                <th class="border border-gray-300 px-4 py-2">Nama Pelanggan</th>
+                <th class="border border-gray-300 px-4 py-2">Customer ID</th>
+                <th class="border border-gray-300 px-4 py-2">Customer Name</th>
                 <th class="border border-gray-300 px-4 py-2">Email</th>
-                <th class="border border-gray-300 px-4 py-2">Total Pesanan</th>
+                <th class="border border-gray-300 px-4 py-2">Total Orders</th>
                 <th class="border border-gray-300 px-4 py-2">Status</th>
-                <th class="border border-gray-300 px-4 py-2">Aktivitas</th>
+                <th class="border border-gray-300 px-4 py-2">Action</th>
             </tr>
         </thead>
         <tbody class="text-center text-gray-700">
@@ -76,8 +76,10 @@
                         class="inline-flex items-center justify-center w-8 h-8 rounded-lg 
                                 text-blue-500 hover:text-blue-600 hover:bg-blue-50 
                                 transition-colors duration-200">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32">
-                            <path fill="#3B82F6" d="M27.87 7.863L23.024 4.82l-7.89 12.566l4.843 3.04zM14.395 21.25l-.107 2.855l2.527-1.337l2.35-1.24l-4.673-2.936zM29.163 3.24L26.63 1.647a1.364 1.364 0 0 0-1.88.43l-1 1.588l4.843 3.042l1-1.586c.4-.64.21-1.483-.43-1.883zm-3.965 23.82c0 .275-.225.5-.5.5h-19a.5.5 0 0 1-.5-.5v-19a.5.5 0 0 1 .5-.5h13.244l1.884-3H5.698c-1.93 0-3.5 1.57-3.5 3.5v19c0 1.93 1.57 3.5 3.5 3.5h19c1.93 0 3.5-1.57 3.5-3.5V11.097l-3 4.776v11.19z"/></svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 48 48"><defs><mask id="SVG544unEnd"><g fill="#1a1a1a" 
+                            stroke="#fff" stroke-linejoin="round" stroke-width="4"><path d="M24 36c11.046 0 20-12 20-12s-8.954-12-20-12S4 24 4 24s8.954 12 20 12Z"/>
+                            <path d="M24 29a5 5 0 1 0 0-10a5 5 0 0 0 0 10Z"/></g></mask></defs><path fill="#3B82F6" d="M0 0h48v48H0z" mask="url(#SVG544unEnd)"/>
+                        </svg>
                     </button>
 
                     <!-- 🔸 Tombol Hapus -->
@@ -110,8 +112,10 @@
                         class="inline-flex items-center justify-center w-8 h-8 rounded-lg 
                                 text-blue-500 hover:text-blue-600 hover:bg-blue-50 
                                 transition-colors duration-200">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32">
-                            <path fill="#3B82F6" d="M27.87 7.863L23.024 4.82l-7.89 12.566l4.843 3.04zM14.395 21.25l-.107 2.855l2.527-1.337l2.35-1.24l-4.673-2.936zM29.163 3.24L26.63 1.647a1.364 1.364 0 0 0-1.88.43l-1 1.588l4.843 3.042l1-1.586c.4-.64.21-1.483-.43-1.883zm-3.965 23.82c0 .275-.225.5-.5.5h-19a.5.5 0 0 1-.5-.5v-19a.5.5 0 0 1 .5-.5h13.244l1.884-3H5.698c-1.93 0-3.5 1.57-3.5 3.5v19c0 1.93 1.57 3.5 3.5 3.5h19c1.93 0 3.5-1.57 3.5-3.5V11.097l-3 4.776v11.19z"/></svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 48 48"><defs><mask id="SVG544unEnd"><g fill="#1a1a1a" 
+                            stroke="#fff" stroke-linejoin="round" stroke-width="4"><path d="M24 36c11.046 0 20-12 20-12s-8.954-12-20-12S4 24 4 24s8.954 12 20 12Z"/>
+                            <path d="M24 29a5 5 0 1 0 0-10a5 5 0 0 0 0 10Z"/></g></mask></defs><path fill="#3B82F6" d="M0 0h48v48H0z" mask="url(#SVG544unEnd)"/>
+                        </svg>
                     </button>
 
                     <!-- 🔸 Tombol Hapus -->

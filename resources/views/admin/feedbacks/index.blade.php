@@ -4,23 +4,23 @@
 
 <!-- 🔹 SECTION: Statistik Kategori -->
 <section class="bg-white shadow rounded-lg p-6">
-    <h3 class="text-xl font-semibold mb-3">Manajemen Ulasan</h3>
+    <h3 class="text-xl font-semibold mb-3">Reviews Management</h3>
 
     <div class="grid grid-cols-4 gap-6 mt-6">
         <div class="bg-teal-50 border border-teal-200 rounded-lg p-4 text-center">
-            <p class="text-sm text-gray-500">Total Kategori</p>
+            <p class="text-sm text-gray-500">Total Reviews</p>
             <h4 class="text-2xl font-bold text-teal-600">1,247</h4>
         </div>
         <div class="bg-teal-50 border border-teal-200 rounded-lg p-4 text-center">
-            <p class="text-sm text-gray-500">Kategori Aktif</p>
+            <p class="text-sm text-gray-500">Average Rating</p>
             <h4 class="text-2xl font-bold text-teal-600">3,891</h4>
         </div>
         <div class="bg-teal-50 border border-teal-200 rounded-lg p-4 text-center">
-            <p class="text-sm text-gray-500">Kategori Non-Aktif</p>
+            <p class="text-sm text-gray-500">Positive Feedback</p>
             <h4 class="text-2xl font-bold text-teal-600">2,156</h4>
         </div>
         <div class="bg-teal-50 border border-teal-200 rounded-lg p-4 text-center">
-            <p class="text-sm text-gray-500">Total Produk</p>
+            <p class="text-sm text-gray-500">Featured Reviews</p>
             <h4 class="text-2xl font-bold text-teal-600">$89,247</h4>
         </div>
     </div>
@@ -45,26 +45,16 @@
 
 <!-- 🔹 SECTION: Table -->
 <section class="bg-white shadow rounded-lg p-6 mt-4">
-    <button 
-        data-modal-target="modal-tambahkategori" 
-        data-modal-toggle="modal-tambahkategori" 
-        type="button"
-        class="mb-3 flex items-center space-x-1 bg-teal-500 hover:bg-teal-600 text-white font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z" />
-        </svg>
-        <span>Tambah Kategori</span>
-    </button>
 
     <table class="min-w-full border border-teal-200 text-left text-sm">
         <thead class="bg-teal-50 text-gray-800 text-center">
             <tr>
-                <th class="border border-gray-300 px-4 py-2">ID Kategori</th>
-                <th class="border border-gray-300 px-4 py-2">Nama Kategori</th>
-                <th class="border border-gray-300 px-4 py-2">Deskripsi</th>
-                <th class="border border-gray-300 px-4 py-2">Total Produk</th>
-                <th class="border border-gray-300 px-4 py-2">Status</th>
-                <th class="border border-gray-300 px-4 py-2">Aktivitas</th>
+                <th class="border border-gray-300 px-4 py-2">Review ID</th>
+                <th class="border border-gray-300 px-4 py-2">Customer Name</th>
+                <th class="border border-gray-300 px-4 py-2">Product</th>
+                <th class="border border-gray-300 px-4 py-2">Rating</th>
+                <th class="border border-gray-300 px-4 py-2">Review Date</th>
+                <th class="border border-gray-300 px-4 py-2">Action</th>
             </tr>
         </thead>
         <tbody class="text-center text-gray-700">
@@ -81,13 +71,15 @@
                 <td class="border border-gray-300 px-4 py-2">
                     <!-- 🔸 Tombol Edit -->
                     <button 
-                        data-modal-target="modal-editkategori" 
-                        data-modal-toggle="modal-editkategori"
+                        data-modal-target="modal-detailreview" 
+                        data-modal-toggle="modal-detailreview"
                         class="inline-flex items-center justify-center w-8 h-8 rounded-lg 
                                 text-blue-500 hover:text-blue-600 hover:bg-blue-50 
                                 transition-colors duration-200">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32">
-                            <path fill="#3B82F6" d="M27.87 7.863L23.024 4.82l-7.89 12.566l4.843 3.04zM14.395 21.25l-.107 2.855l2.527-1.337l2.35-1.24l-4.673-2.936zM29.163 3.24L26.63 1.647a1.364 1.364 0 0 0-1.88.43l-1 1.588l4.843 3.042l1-1.586c.4-.64.21-1.483-.43-1.883zm-3.965 23.82c0 .275-.225.5-.5.5h-19a.5.5 0 0 1-.5-.5v-19a.5.5 0 0 1 .5-.5h13.244l1.884-3H5.698c-1.93 0-3.5 1.57-3.5 3.5v19c0 1.93 1.57 3.5 3.5 3.5h19c1.93 0 3.5-1.57 3.5-3.5V11.097l-3 4.776v11.19z"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 48 48"><defs><mask id="SVG544unEnd"><g fill="#1a1a1a" 
+                            stroke="#fff" stroke-linejoin="round" stroke-width="4"><path d="M24 36c11.046 0 20-12 20-12s-8.954-12-20-12S4 24 4 24s8.954 12 20 12Z"/>
+                            <path d="M24 29a5 5 0 1 0 0-10a5 5 0 0 0 0 10Z"/></g></mask></defs><path fill="#3B82F6" d="M0 0h48v48H0z" mask="url(#SVG544unEnd)"/>
+                        </svg>
                     </button>
 
                     <!-- 🔸 Tombol Hapus -->
@@ -115,13 +107,14 @@
                 <td class="border border-gray-300 px-4 py-2">
                     <!-- 🔸 Tombol Edit -->
                     <button 
-                        data-modal-target="modal-editkategori" 
-                        data-modal-toggle="modal-editkategori"
+                        data-modal-target="modal-detailreview" 
+                        data-modal-toggle="modal-detailreview"
                         class="inline-flex items-center justify-center w-8 h-8 rounded-lg 
                                 text-blue-500 hover:text-blue-600 hover:bg-blue-50 
                                 transition-colors duration-200">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32">
-                            <path fill="#3B82F6" d="M27.87 7.863L23.024 4.82l-7.89 12.566l4.843 3.04zM14.395 21.25l-.107 2.855l2.527-1.337l2.35-1.24l-4.673-2.936zM29.163 3.24L26.63 1.647a1.364 1.364 0 0 0-1.88.43l-1 1.588l4.843 3.042l1-1.586c.4-.64.21-1.483-.43-1.883zm-3.965 23.82c0 .275-.225.5-.5.5h-19a.5.5 0 0 1-.5-.5v-19a.5.5 0 0 1 .5-.5h13.244l1.884-3H5.698c-1.93 0-3.5 1.57-3.5 3.5v19c0 1.93 1.57 3.5 3.5 3.5h19c1.93 0 3.5-1.57 3.5-3.5V11.097l-3 4.776v11.19z"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 48 48"><defs><mask id="SVG544unEnd"><g fill="#808080" 
+                            stroke="#fff" stroke-linejoin="round" stroke-width="4"><path d="M24 36c11.046 0 20-12 20-12s-8.954-12-20-12S4 24 4 24s8.954 12 20 12Z"/>
+                            <path d="M24 29a5 5 0 1 0 0-10a5 5 0 0 0 0 10Z"/></g></mask></defs><path fill="#3B82F6" d="M0 0h48v48H0z" mask="url(#SVG544unEnd)"/></svg>
                     </button>
 
                     <!-- 🔸 Tombol Hapus -->
@@ -140,61 +133,106 @@
     </table>
 </section>
 
-<!-- 🔹 MODAL: Tambah Kategori-->
-<div id="modal-tambahkategori" class="hidden fixed inset-0 z-50 flex justify-center items-center w-full h-full bg-gray-800/40">
-    <div class="relative p-4 w-full max-w-md">
-        <div class="relative bg-white rounded-lg shadow-lg">
+<!-- 🔹 MODAL: Detail Review-->
+<div id="modal-detailreview" class="hidden fixed inset-0 z-50 flex justify-center items-center w-full h-full bg-gray-800/40">
+    <div class="relative p-0 w-full max-w-md"> <div class="relative bg-white rounded-lg shadow-lg">
+            
             <div class="flex items-center justify-between p-4 border-b border-gray-200">
-                <h3 class="text-lg font-semibold text-gray-900">Tambah Kategori Baru</h3>
-                <button type="button" data-modal-toggle="modal-tambahkategori" class="text-gray-400 hover:text-gray-700 rounded-lg p-1">
+                <h3 class="text-lg font-semibold text-gray-900">
+                    Detail Ulasan Pelanggan
+                </h3>
+                <button type="button" data-modal-toggle="modal-detailreview" class="text-gray-400 hover:text-gray-700 rounded-lg p-1">
                     <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1l12 12M13 1L1 13" />
                     </svg>
                 </button>
             </div>
-
-            <form class="p-4">
-                <div class="mb-4">
-                    <label class="block mb-2 text-sm font-medium text-gray-900">Nama Kategori</label>
-                    <input type="text" class="w-full p-2 border border-gray-300 rounded-lg text-sm" placeholder="Masukkan nama kategori">
+            
+            <div class="p-5 space-y-5"> <div class="flex items-center space-x-3">
+                    <div class="flex-shrink-0">
+                        <span class="flex items-center justify-center w-10 h-10 rounded-full bg-blue-100">
+                            <svg class="w-6 h-6 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A1.875 1.875 0 0 1 17.25 22.5H6.75a1.875 1.875 0 0 1-2.249-2.382Z" />
+                            </svg>
+                        </span>
+                    </div>
+                    <div>
+                        <p class="text-sm font-semibold text-gray-900">Dr. Sarah Wijaya</p>
+                        <p class="text-sm text-gray-500">sarah.wijaya@rsudarma.co.id</p>
+                    </div>
                 </div>
-                <div class="mb-4">
-                    <label class="block mb-2 text-sm font-medium text-gray-900">Deskripsi</label>
-                    <textarea rows="3" class="w-full p-2 border border-gray-300 rounded-lg text-sm" placeholder="Masukkan deskripsi"></textarea>
-                </div>
-                <button type="submit" class="w-full bg-teal-500 hover:bg-teal-600 text-white font-medium rounded-lg text-sm px-4 py-2.5">
-                    Simpan
-                </button>
-            </form>
-        </div>
-    </div>
-</div>
 
-<!-- 🔹 MODAL: Edit Kategori-->
-<div id="modal-editkategori" class="hidden fixed inset-0 z-50 flex justify-center items-center w-full h-full bg-gray-800/40">
-    <div class="relative p-4 w-full max-w-md">
-        <div class="relative bg-white rounded-lg shadow-lg">
-            <div class="flex items-center justify-between p-4 border-b border-gray-200">
-                <h3 class="text-lg font-semibold text-gray-900">Edit Kategori</h3>
-                <button type="button" data-modal-toggle="modal-editkategori" class="text-gray-400 hover:text-gray-700 rounded-lg p-1">
-                    <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1l12 12M13 1L1 13" />
+                <div>
+                    <label class="block text-xs font-medium text-gray-500 uppercase tracking-wider">Produk</label>
+                    <p class="text-base font-medium text-gray-800 mt-1">Termometer Digital Infrared</p>
+                    <p class="text-sm text-gray-500">Alat Pemeriksaan</p>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-gray-500 uppercase tracking-wider">Rating</label>
+                    <div class="flex items-center mt-1">
+                        <svg class="w-5 h-5 text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M10 15l-5.878 3.09 1.123-6.545L.489 7.09l6.572-.955L10 0l2.939 6.135 6.572.955-4.756 4.455 1.123 6.545z" />
+                        </svg>
+                        <svg class="w-5 h-5 text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M10 15l-5.878 3.09 1.123-6.545L.489 7.09l6.572-.955L10 0l2.939 6.135 6.572.955-4.756 4.455 1.123 6.545z" />
+                        </svg>
+                        <svg class="w-5 h-5 text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M10 15l-5.878 3.09 1.123-6.545L.489 7.09l6.572-.955L10 0l2.939 6.135 6.572.955-4.756 4.455 1.123 6.545z" />
+                        </svg>
+                        <svg class="w-5 h-5 text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M10 15l-5.878 3.09 1.123-6.545L.489 7.09l6.572-.955L10 0l2.939 6.135 6.572.955-4.756 4.455 1.123 6.545z" />
+                        </svg>
+                        <svg class="w-5 h-5 text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M10 15l-5.878 3.09 1.123-6.545L.489 7.09l6.572-.955L10 0l2.939 6.135 6.572.955-4.756 4.455 1.123 6.545z" />
+                        </svg>
+                        <span class="ml-2 text-sm font-medium text-gray-700">(5/5)</span>
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-xs font-medium text-gray-500 uppercase tracking-wider">Ulasan Lengkap</label>
+                    <div class="mt-1 bg-gray-50 border border-gray-200 rounded-lg p-3">
+                        <p class="text-sm text-gray-700 leading-relaxed">
+                            Termometer ini sangat akurat dan mudah digunakan. Hasil pengukuran cepat dan konsisten. Sangat membantu untuk pemeriksaan rutin pasien di rumah sakit kami. Build quality juga sangat baik dan tahan lama.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-center">
+                    <div>
+                        <label class="block text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal Submit</label>
+                        <p class="text-sm text-gray-700 mt-1">Minggu, 15 Desember 2024</p>
+                    </div>
+                    <div>
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                            <svg class="w-4 h-4 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M5 4.5a2.5 2.5 0 0 1 5 0v5.879a.5.5 0 0 1-.146.354l-3.5 3.5a.5.5 0 0 1-.708 0l-3.5-3.5A.5.5 0 0 1 2 10.379V4.5A2.5 2.5 0 0 1 5 4.5z" />
+                                <path d="M11.5 6.5a.5.5 0 0 0-1 0v4.379a.5.5 0 0 0 .146.354l3.5 3.5a.5.5 0 0 0 .708 0l3.5-3.5a.5.5 0 0 0 .146-.354V6.5a.5.5 0 0 0-1 0v4.086l-3.146 3.147L11.5 10.586V6.5z" />
+                            </svg>s
+                            Ulasan Unggulan
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+            
+            <div class="flex items-center justify-end space-x-3 p-4 border-t border-gray-200 rounded-b-lg">
+                <button type="button" class="flex items-center justify-center text-sm font-medium px-4 py-2 rounded-lg bg-yellow-100 text-yellow-800 hover:bg-yellow-200">
+                    <svg class="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M5 4.5a2.5 2.5 0 0 1 5 0v5.879a.5.5 0 0 1-.146.354l-3.5 3.5a.5.5 0 0 1-.708 0l-3.5-3.5A.5.5 0 0 1 2 10.379V4.5A2.5 2.5 0 0 1 5 4.5z" />
+                        <path d="M11.5 6.5a.5.5 0 0 0-1 0v4.379a.5.5 0 0 0 .146.354l3.5 3.5a.5.5 0 0 0 .708 0l3.5-3.5a.5.5 0 0 0 .146-.354V6.5a.5.5 0 0 0-1 0v4.086l-3.146 3.147L11.5 10.586V6.5z" />
                     </svg>
+                    Hapus dari Unggulan
+                </button>
+                <button type="button" class="flex items-center justify-center text-sm font-medium px-4 py-2 rounded-lg text-white bg-red-600 hover:bg-red-700">
+                    <svg class="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M9 2a1 1 0 0 0-1 1H6a1 1 0 0 0 0 2h12a1 1 0 0 0 0-2h-2a1 1 0 0 0-1-1H9zM3 7a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z" clip-rule="evenodd" />
+                    </svg>
+                    Hapus Ulasan
                 </button>
             </div>
-            <form class="p-4">
-                <div class="mb-4">
-                    <label class="block mb-2 text-sm font-medium text-gray-900">Nama Kategori</label>
-                    <input type="text" class="w-full p-2 border border-gray-300 rounded-lg text-sm" value="Elektronik">
-                </div>
-                <div class="mb-4">
-                    <label class="block mb-2 text-sm font-medium text-gray-900">Deskripsi</label>
-                    <textarea rows="3" class="w-full p-2 border border-gray-300 rounded-lg text-sm">Peralatan elektronik rumah tangga</textarea>
-                </div>
-                <button type="submit" class="w-full bg-teal-500 hover:bg-teal-600 text-white font-medium rounded-lg text-sm px-4 py-2.5">
-                    Simpan Perubahan
-                </button>
-            </form>
+            
         </div>
     </div>
 </div>

@@ -24,50 +24,58 @@
 
     <!-- Sidebar -->
     <aside class="w-64 bg-white shadow-md min-h-screen relative">
-        <div class="p-5 flex items-center space-x-1 border-b">
-            <!-- Logo Gambar -->
+        <!-- Header Logo -->
+        <div class="p-5 flex items-center space-x-2 border-b border-gray-300">
             <img src="{{ asset('images/logo.png') }}" alt="Hygeia Logo" class="h-10 w-10 object-contain">
-
-            <!-- Teks Hygeia dan Tagline -->
-            <div class="flex flex-col">
-                <h1 class="text-2xl logo-font text-teal-600">Hygeia</h1>
-            </div>
+            <h1 class="text-2xl logo-font text-teal-600">Hygeia</h1>
         </div>
 
         <!-- Navigation -->
         <nav class="p-4 space-y-2">
-            <a href="{{ route('dashboard') }}"
-               class="flex items-center space-x-2 py-2 px-4 rounded-md {{ request()->routeIs('dashboard') ? 'bg-teal-50 text-teal-700 font-medium' : 'hover:bg-gray-100 text-gray-700' }}">
+            {{-- Dashboard --}}
+            <a href="{{ route('admin.dashboard') }}"
+               class="flex items-center space-x-2 py-2 px-4 rounded-md 
+               {{ request()->routeIs('admin.dashboard') ? 'bg-teal-50 text-teal-700 font-medium' : 'hover:bg-gray-100 text-gray-700' }}">
                 <i class="bi bi-speedometer2"></i>
                 <span>Dashboard</span>
             </a>
 
-            <a href="{{ route('product') }}"
-               class="flex items-center space-x-2 py-2 px-4 rounded-md {{ request()->routeIs('product*') ? 'bg-teal-50 text-teal-700 font-medium' : 'hover:bg-gray-100 text-gray-700' }}">
+            {{-- Products --}}
+            <a href="{{ route('admin.products.index') }}"
+               class="flex items-center space-x-2 py-2 px-4 rounded-md 
+               {{ request()->routeIs('admin.products.*') ? 'bg-teal-50 text-teal-700 font-medium' : 'hover:bg-gray-100 text-gray-700' }}">
                 <i class="bi bi-box-seam"></i>
                 <span>Products</span>
             </a>
 
-            <a href="{{ route('categories') }}"
-               class="flex items-center space-x-2 py-2 px-4 rounded-md {{ request()->routeIs('categories*') ? 'bg-teal-50 text-teal-700 font-medium' : 'hover:bg-gray-100 text-gray-700' }}">
+            {{-- Categories --}}
+            <a href="{{ route('admin.categories.index') }}"
+               class="flex items-center space-x-2 py-2 px-4 rounded-md 
+               {{ request()->routeIs('admin.categories.*') ? 'bg-teal-50 text-teal-700 font-medium' : 'hover:bg-gray-100 text-gray-700' }}">
                 <i class="bi bi-tags-fill"></i>
                 <span>Categories</span>
             </a>
 
-            <a href="{{ route('customers') }}" 
-               class="flex items-center space-x-2 py-2 px-4 rounded-md {{ request()->routeIs('customers*') ? 'bg-teal-50 text-teal-700 font-medium' : 'hover:bg-gray-100 text-gray-700' }}">
+            {{-- Customers --}}
+            <a href="{{ route('admin.customers') }}"
+               class="flex items-center space-x-2 py-2 px-4 rounded-md 
+               {{ request()->routeIs('admin.customers') ? 'bg-teal-50 text-teal-700 font-medium' : 'hover:bg-gray-100 text-gray-700' }}">
                 <i class="bi bi-people-fill"></i>
                 <span>Customers</span>
             </a>
 
-            <a href="{{ route('orders') }}" 
-               class="flex items-center space-x-2 py-2 px-4 rounded-md {{ request()->routeIs('orders*') ? 'bg-teal-50 text-teal-700 font-medium' : 'hover:bg-gray-100 text-gray-700' }}">
+            {{-- Orders --}}
+            <a href="{{ route('admin.orders') }}"
+               class="flex items-center space-x-2 py-2 px-4 rounded-md 
+               {{ request()->routeIs('admin.orders') ? 'bg-teal-50 text-teal-700 font-medium' : 'hover:bg-gray-100 text-gray-700' }}">
                 <i class="bi bi-cart-check-fill"></i>
                 <span>Orders</span>
             </a>
 
-            <a href="{{ route('feedbacks') }}" 
-               class="flex items-center space-x-2 py-2 px-4 rounded-md {{ request()->routeIs('feedbacks*') ? 'bg-teal-50 text-teal-700 font-medium' : 'hover:bg-gray-100 text-gray-700' }}">
+            {{-- Reviews / Feedbacks --}}
+            <a href="{{ route('admin.feedbacks') }}"
+               class="flex items-center space-x-2 py-2 px-4 rounded-md 
+               {{ request()->routeIs('admin.feedbacks') ? 'bg-teal-50 text-teal-700 font-medium' : 'hover:bg-gray-100 text-gray-700' }}">
                 <i class="bi bi-bar-chart-fill"></i>
                 <span>Reviews</span>
             </a>
@@ -75,11 +83,16 @@
 
         <!-- Logout -->
         <div class="absolute bottom-4 w-full px-4">
-            <a href="#" class="block text-red-600 font-medium hover:text-red-800">
-                <i class="bi bi-box-arrow-right"></i>
-                Logout
-            </a>
+            <form method="POST" action="{{ route('admin.logout') }}">
+                @csrf
+                <button type="submit" 
+                    class="w-full flex items-center justify-start space-x-2 text-red-600 font-medium hover:text-red-800">
+                    <i class="bi bi-box-arrow-right"></i>
+                    <span>Logout</span>
+                </button>
+            </form>
         </div>
+
     </aside>
 
     <!-- Main Content -->
@@ -88,8 +101,7 @@
         <header class="bg-white shadow-sm p-5 flex justify-between items-center">
             <h2 class="text-lg font-semibold">Welcome, Panacea</h2>
             <div class="flex items-center space-x-4">
-
-                <img src="{{ asset('images/logo admin.png') }}" alt="Hygeia Logo" class="h-10 w-10 object-contain">
+                <img src="{{ asset('images/logo admin.png') }}" alt="Admin Icon" class="h-10 w-10 object-contain rounded-full">
             </div>
         </header>
 
@@ -98,9 +110,11 @@
             @yield('content')
         </main>
     </div>
-    
-    <!-- Tambahkan sebelum penutup body -->
+
+    <!-- Flowbite -->
     <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
+
+    @stack('scripts')
 
 </body>
 </html>
