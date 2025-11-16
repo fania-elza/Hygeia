@@ -152,7 +152,7 @@
 
                         <!-- Jika sudah login -->
                         @auth
-                            <form action="{{ route('customer.cart') }}" method="POST" class="w-full flex">
+                            <form action="{{ route('customer.cart.add') }}" method="POST" class="w-full flex">
                                 @csrf
                                 <input type="hidden" name="product_id" value="{{ $product->id }}">
                                 <input type="hidden" name="quantity" id="addToCartQty" value="1">
@@ -168,8 +168,8 @@
                                 </button>
                             </form>
 
-                            <a href="{{ route('customer.checkout') }}?product_id={{ $product->id }}&qty=1"
-                                class="w-full bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition duration-200 shadow-md">
+                            <a href="{{ route('customer.checkout.direct', ['product_id' => $product->id, 'qty' => 1]) }}"
+                            class="w-full bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition duration-200 shadow-md">
                                 Beli Sekarang
                                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                                     <path d="M11.383 2.978A1 1 0 0112 3v5h5a1 1 0 01.618.904l-2.852 8.555a1 1 0 01-.94.741H6.175a1 1 0 01-.97-.803L3.001 4.19A1 1 0 014 3h5.117a1 1 0 01.883.519l1.383-2.538a1 1 0 011.001-.537z"/>

@@ -86,9 +86,28 @@ class CheckoutController extends Controller
         // Simpan alamat ke session
         session()->put('shipping_info', $shippingInfo);
 
-        return redirect()->route('store.payment.show')
+        return redirect()->route('customer.payment')
             ->with('success', 'Alamat pengiriman berhasil disimpan.');
     }
+
+    public function directCheckout(Request $request)
+    {
+        $productId = $request->query('product_id');
+        $qty = $request->query('qty', 1);
+
+        $product = \App\Models\Product::findOrFail($productId);
+
+        session()->put('checkout_items', [[
+            'product_id' => $product->id,
+            'name'       => $product->name,
+            'price'      => $product->price,
+            'quantity'   => $qty,
+            'image'      => $product->image ?? 'https://via.placeholder.com/64',
+        ]]);
+
+        return $this->show(); // tampilkan halaman checkout langsung
+    }
+
 
     /**
      * 💳 Halaman pembayaran
@@ -99,12 +118,12 @@ class CheckoutController extends Controller
         $shippingInfo = session()->get('shipping_info', []);
 
         if (empty($checkoutItems)) {
-            return redirect()->route('store.cart')
+            return redirect()->route('customer.cart')
                 ->with('error', 'Keranjang checkout kosong.');
         }
 
         if (empty($shippingInfo)) {
-            return redirect()->route('store.checkout.show')
+            return redirect()->route('customer.checkout')
                 ->with('error', 'Silakan isi alamat pengiriman terlebih dahulu.');
         }
 

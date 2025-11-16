@@ -26,7 +26,31 @@ class OrderController extends Controller
             ->latest()
             ->paginate(10);
 
-        // Statistik berdasarkan enum baru
+        // Tambahkan atribut JSON untuk setiap order agar Blade aman
+        $orders->getCollection()->transform(function ($order) {
+            $order->json_data = [
+                'id' => $order->id,
+                'created_at' => $order->created_at->toISOString(),
+                'payment_method' => $order->payment_method,
+                'status' => $order->status,
+                'total_amount' => $order->total_amount,
+                'user' => [
+                    'name' => $order->user->username ?? null,
+                    'email' => $order->user->email ?? null,
+                    'address' => $order->full_address ?? null,
+                ],
+                'order_items' => $order->orderItems->map(function ($item) {
+                    return [
+                        'product' => ['name' => $item->product->name ?? null],
+                        'quantity' => $item->quantity,
+                        'price' => $item->price,
+                    ];
+                })->values()->toArray(),
+            ];
+            return $order;
+        });
+
+        // Statistik berdasarkan enum
         $totalOrders = Order::count();
         $completedOrders = Order::where('status', 'completed')->count();
         $pendingOrders = Order::where('status', 'pending')->count();
@@ -53,7 +77,7 @@ class OrderController extends Controller
     public function update(Request $request, Order $order)
     {
         $request->validate([
-            'status' => 'required|in:pending,processing,completed,cancelled',
+            'status' => 'required|in:diproses,dikirim,selesai,cancel',
         ]);
 
         $order->update([

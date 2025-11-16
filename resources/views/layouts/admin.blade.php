@@ -73,12 +73,12 @@
             </a>
 
             {{-- Reviews / Feedbacks --}}
-            <a href="{{ route('admin.feedbacks') }}"
+            <!--<a href="{{ route('admin.feedbacks') }}"
                class="flex items-center space-x-2 py-2 px-4 rounded-md 
                {{ request()->routeIs('admin.feedbacks') ? 'bg-teal-50 text-teal-700 font-medium' : 'hover:bg-gray-100 text-gray-700' }}">
                 <i class="bi bi-bar-chart-fill"></i>
                 <span>Reviews</span>
-            </a>
+            </a>-->
         </nav>
 
         <!-- Logout -->

@@ -53,12 +53,12 @@
         </div>
 
         <select name="status" onchange="this.form.submit()"
-            class="ml-2 px-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm font-medium">
+            class="ml-2 px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium">
             <option value="">All Status</option>
-            <option value="pending" {{ request('status')=='pending'?'selected':'' }}>Pending</option>
-            <option value="processing" {{ request('status')=='processing'?'selected':'' }}>Processing</option>
-            <option value="completed" {{ request('status')=='completed'?'selected':'' }}>Completed</option>
-            <option value="cancelled" {{ request('status')=='cancelled'?'selected':'' }}>Cancelled</option>
+            <option value="diproses" {{ request('status') == 'diproses' ? 'selected' : '' }}>Diproses</option>
+            <option value="dikirim" {{ request('status') == 'dikirim' ? 'selected' : '' }}>Dikirim</option>
+            <option value="selesai" {{ request('status') == 'selesai' ? 'selected' : '' }}>Selesai</option>
+            <option value="cancel" {{ request('status') == 'cancel' ? 'selected' : '' }}>Dibatalkan</option>
         </select>
     </div>
 </form>
@@ -83,66 +83,57 @@
                 @forelse ($orders as $order)
                 <tr>
                     <td class="border px-4 py-2 font-medium text-teal-700">{{ $order->id }}</td>
-                    <td class="border px-4 py-2">{{ $order->user->name }}</td>
+                    <td class="border px-4 py-2">{{ $order->user->username }}</td>
                     <td class="border px-4 py-2">Rp {{ number_format($order->total_amount,0,',','.') }}</td>
                     <td class="border px-4 py-2">{{ $order->payment_method }}</td>
 
                     <td class="border px-4 py-2">
-                        @if ($order->status=='completed')
-                            <span class="px-3 py-1.5 rounded-full bg-emerald-100 text-emerald-700">Completed</span>
-                        @elseif ($order->status=='pending')
-                            <span class="px-3 py-1.5 rounded-full bg-yellow-100 text-yellow-700">Pending</span>
-                        @elseif ($order->status=='cancelled')
-                            <span class="px-3 py-1.5 rounded-full bg-red-100 text-red-700">Cancelled</span>
+                        @if ($order->status == 'selesai')
+                            <span class="px-3 py-1.5 rounded-full bg-emerald-100 text-emerald-700">Selesai</span>
+                        @elseif ($order->status == 'diproses')
+                            <span class="px-3 py-1.5 rounded-full bg-yellow-100 text-yellow-700">Diproses</span>
+                        @elseif ($order->status == 'dikirim')
+                            <span class="px-3 py-1.5 rounded-full bg-blue-100 text-blue-700">Dikirim</span>
+                        @elseif ($order->status == 'cancel')
+                            <span class="px-3 py-1.5 rounded-full bg-red-100 text-red-700">Dibatalkan</span>
                         @else
-                            <span class="px-3 py-1.5 rounded-full bg-blue-100 text-blue-700">{{ $order->status }}</span>
+                            <span class="px-3 py-1.5 rounded-full bg-gray-100 text-gray-700">{{ $order->status }}</span>
                         @endif
                     </td>
 
                     <td class="border px-4 py-2">{{ $order->created_at->format('d F Y') }}</td>
 
                     <td class="border px-4 py-2">
-
                         {{-- BUTTON DETAIL --}}
                         <button
-                          class="btn-detail w-8 h-8 rounded-lg text-blue-500 hover:bg-blue-50"
-                          data-order='@json([
-                              "id" => $order->id,
-                              "created_at" => $order->created_at->toISOString(),
-                              "payment_method" => $order->payment_method,
-                              "status" => $order->status,
-                              "total_amount" => $order->total_amount,
-
-                              "user" => [
-                                  "name" => $order->user->name,
-                                  "email" => $order->user->email,
-                                  "address" => $order->full_address, // ambil dari orders
-                              ],
-
-                              "order_items" => $order->orderItems->map(function ($item) {
-                                  return [
-                                      "product" => [
-                                          "name" => $item->product->name
-                                      ],
-                                      "quantity" => $item->quantity,
-                                      "price" => $item->price,
-                                  ];
-                              }),
-                          ])'
-                          data-update-url="{{ route('admin.orders.update',$order->id) }}"
-                          data-modal-target="modal-detailorder"
-                          data-modal-toggle="modal-detailorder">
-                          🔍
-                      </button>
-
+                            type="button"
+                            class="btn-detail inline-flex items-center justify-center w-8 h-8 rounded-lg text-blue-500 hover:text-blue-600 hover:bg-blue-50"
+                            data-order='@json($order->load("user","orderItems.product"))'
+                            data-update-url="{{ route('admin.orders.update', $order->id) }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 48 48">
+                              <defs>
+                                  <mask id="SVG544unEnd">
+                                      <g fill="#1a1a1a" stroke="#fff" stroke-linejoin="round" stroke-width="4">
+                                          <path d="M24 36c11.046 0 20-12 20-12s-8.954-12-20-12S4 24 4 24s8.954 12 20 12Z"/>
+                                          <path d="M24 29a5 5 0 1 0 0-10a5 5 0 0 0 0 10Z"/>
+                                      </g>
+                                  </mask>
+                              </defs>
+                              <path fill="#3B82F6" d="M0 0h48v48H0z" mask="url(#SVG544unEnd)" />
+                          </svg>
+                        </button>
 
                         {{-- BUTTON DELETE --}}
                         <button
-                            class="btn-hapus w-8 h-8 rounded-lg text-red-500 hover:bg-red-50"
-                            data-delete-url="{{ route('admin.orders.destroy',$order->id) }}"
-                            data-modal-target="modal-hapuspesanan"
-                            data-modal-toggle="modal-hapuspesanan">
-                            🗑️
+                            class="btn-hapus inline-flex items-center justify-center w-8 h-8 rounded-lg text-red-500 hover:text-red-600 hover:bg-red-50"
+                            data-delete-url="{{ route('admin.orders.destroy',$order->id) }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                              <path d="M3 6h18"/>
+                              <path d="M19 6l-1 14H6L5 6"/>
+                              <path d="M10 11v6"/>
+                              <path d="M14 11v6"/>
+                              <path d="M9 6V4h6v2"/>
+                          </svg>
                         </button>
 
                     </td>
@@ -208,15 +199,14 @@
         </div>
 
         <div class="pt-2">
-          <label class="font-medium">Update Status</label>
-          <select id="modal-order-status" name="status" class="border rounded-lg p-2 w-full">
-            <option value="completed">Completed</option>
-            <option value="processing">Processing</option>
-            <option value="pending">Pending</option>
-            <option value="cancelled">Cancelled</option>
-          </select>
+            <label class="font-medium">Update Status</label>
+            <select id="modal-order-status" name="status" class="border rounded-lg p-2 w-full">
+                <option value="diproses">Diproses</option>
+                <option value="dikirim">Dikirim</option>
+                <option value="selesai">Selesai</option>
+                <option value="cancel">Dibatalkan</option>
+            </select>
         </div>
-
       </div>
 
       <div class="flex justify-end gap-3 p-4 border-t">
@@ -262,14 +252,12 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
-    // Helper format
     const rupiah = (n) => new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR'}).format(n);
     const tanggal = (d) => new Date(d).toLocaleDateString('id-ID',{year:'numeric',month:'long',day:'numeric'});
 
-    // MODAL DETAIL =======================
+    // MODAL DETAIL
     document.querySelectorAll('.btn-detail').forEach(btn => {
         btn.addEventListener('click', () => {
-
             const data = JSON.parse(btn.dataset.order);
             const url = btn.dataset.updateUrl;
 
@@ -289,7 +277,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const list = document.getElementById('modal-products-list');
             list.innerHTML = "";
-
             if (data.order_items) {
                 data.order_items.forEach(i => {
                     list.innerHTML += `
@@ -305,7 +292,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // MODAL DELETE ========================
+    // MODAL DELETE
     document.querySelectorAll('.btn-hapus').forEach(btn => {
         btn.addEventListener('click', () => {
             document.getElementById('form-hapus').action = btn.dataset.deleteUrl;

@@ -7,8 +7,8 @@
         <nav class="hidden md:flex space-x-8 text-green-700 font-medium">
             <a href="{{ url('/Hygeia') }}" class="hover:text-blue-700">Beranda</a>
             <a href="{{ url('/Hygeia/produk') }}" class="hover:text-blue-700">Produk</a>
-            <a href="#tentang" class="hover:text-blue-700">Tentang Kami</a>
-            <a href="#kontak" class="hover:text-blue-700">Kontak</a>
+            <a href="{{ route('store.home') }}#tentang-kami" class="hover:text-blue-700">Tentang Kami</a>
+            <a href="{{ route('store.home') }}#kontak" class="hover:text-blue-700">Kontak</a>
         </nav>
         <div class="flex items-center gap-x-3">
             <a href="{{ route('store.profile.index') }}" class="inline-block">

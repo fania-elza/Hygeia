@@ -2,29 +2,43 @@
 
 @section('content')
 
-<!-- 🔹 SECTION: Statistik Kategori -->
+<!-- 🔹 SECTION: Statistik Pelanggan -->
 <section class="bg-white shadow rounded-lg p-6">
     <h3 class="text-xl font-semibold mb-3">Customer Management</h3>
 
     <div class="grid grid-cols-4 gap-6 mt-6">
+        <!-- Total Customers -->
         <div class="bg-teal-50 border border-teal-200 rounded-lg p-4 text-center">
             <p class="text-sm text-gray-500">Total Customers</p>
-            <h4 class="text-2xl font-bold text-teal-600">1,247</h4>
+            <h4 class="text-2xl font-bold text-teal-600">{{ $customers->count() }}</h4>
         </div>
+
+        <!-- Active Customers -->
         <div class="bg-teal-50 border border-teal-200 rounded-lg p-4 text-center">
             <p class="text-sm text-gray-500">Active Customers</p>
-            <h4 class="text-2xl font-bold text-teal-600">3,891</h4>
+            <h4 class="text-2xl font-bold text-teal-600">
+                {{ $customers->where('status', true)->count() }}
+            </h4>
         </div>
+
+        <!-- New Registrations (last 7 days) -->
         <div class="bg-teal-50 border border-teal-200 rounded-lg p-4 text-center">
             <p class="text-sm text-gray-500">New Registrations</p>
-            <h4 class="text-2xl font-bold text-teal-600">2,156</h4>
+            <h4 class="text-2xl font-bold text-teal-600">
+                {{ $customers->filter(fn($c) => $c->created_at->greaterThan(now()->subWeek()))->count() }}
+            </h4>
         </div>
+
+        <!-- Total Orders -->
         <div class="bg-teal-50 border border-teal-200 rounded-lg p-4 text-center">
             <p class="text-sm text-gray-500">Total Orders</p>
-            <h4 class="text-2xl font-bold text-teal-600">$89,247</h4>
+            <h4 class="text-2xl font-bold text-teal-600">
+                {{ $customers->sum('orders_count') }}
+            </h4>
         </div>
     </div>
 </section>
+
 
 <!-- 🔹 SECTION: Search -->
 <div class="flex items-center justify-between w-full mx-auto p-4 mt-6 bg-white rounded-xl border border-gray-200 shadow-sm">
@@ -76,14 +90,15 @@
                           data-modal-target="modal-detailcustomer" 
                           data-modal-toggle="modal-detailcustomer"
                           class="detail-customer inline-flex items-center justify-center w-8 h-8 rounded-lg text-blue-500 hover:text-blue-600 hover:bg-blue-50"
+                          data-id="{{ $customer->id }}"
                           data-username="{{ $customer->username }}"
                           data-email="{{ $customer->email }}"
-                          data-phone="{{ $customer->contact_number }}"
+                          data-phone="{{ $customer->contact_number ?? '-' }}"
                           data-orders-count="{{ $customer->orders_count ?? 0 }}"
-                          data-dob="{{ $customer->dob }}"
-                          data-gender="{{ $customer->gender }}"
-                          data-address="{{ $customer->address }}"
-                          data-city="{{ $customer->city }}"
+                          data-dob="{{ $customer->dob ?? '-' }}"
+                          data-gender="{{ $customer->gender ?? '-' }}"
+                          data-address="{{ $customer->address ?? '-' }}"
+                          data-city="{{ $customer->city ?? '-' }}"
                           data-recent-transactions='@json($customer->recent_transactions ?? [])'
                       >
                           <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 48 48">
@@ -121,7 +136,7 @@
     </table>
 </section>
 
-<!-- 🔹 MODAL: Detail Customer (tidak diubah styling) -->
+<!-- 🔹 MODAL: Detail Customer -->
 <div id="modal-detailcustomer" class="hidden fixed inset-0 z-50 flex justify-center items-center w-full h-full bg-gray-800/40">
   <div class="relative p-4 w-full max-w-lg">
     <div class="relative bg-white rounded-lg shadow-lg">
@@ -139,23 +154,25 @@
         <div class="bg-teal-50 border border-teal-200 rounded-xl p-5">
           <div class="flex items-center gap-4 mb-5">
             <div class="flex-shrink-0">
+              <!-- Initials tetap SJ -->
               <div class="w-14 h-14 bg-teal-100 text-teal-600 flex items-center justify-center rounded-full text-xl font-bold" id="detail-initials">
                 SJ
               </div>
             </div>
             <div>
-              <h4 class="text-lg font-semibold text-gray-800" id="detail-username">Dr. Sarah Johnson</h4>
-              <p class="text-sm text-gray-600" id="detail-email">sarah.johnson@email.com</p>
-              <p class="text-sm text-gray-600" id="detail-phone">+62 812-3456-7890</p>
+              <!-- Value tetap dari server -->
+              <h4 class="text-lg font-semibold text-gray-800" id="detail-username">{{ $customer->username }}</h4>
+              <p class="text-sm text-gray-600" id="detail-email">{{ $customer->email }}</p>
+              <p class="text-sm text-gray-600" id="detail-phone">{{ $customer->contact_number }}</p>
             </div>
           </div>
           <div class="grid grid-cols-2 gap-4 text-sm text-gray-700">
             <div>
-              <p><span class="font-semibold">ID Pelanggan:</span> <span id="detail-id">CUST-001</span></p>
-              <p><span class="font-semibold">Total Pesanan:</span> <span id="detail-orders-count">15</span></p>
+              <p><span class="font-semibold">ID Pelanggan:</span> <span id="detail-id">{{ $customer->id }}</span></p>
+              <p><span class="font-semibold">Total Pesanan:</span> <span id="detail-orders-count">{{ $customer->orders_count ?? 0 }}</span></p>
             </div>
             <div>
-              <p><span class="font-semibold">Tanggal Lahir:</span> <span id="detail-dob">January 15, 2024</span></p>
+              <p><span class="font-semibold">Tanggal Lahir:</span> <span id="detail-dob">{{ $customer->dob }}</span></p>
             </div>
           </div>
         </div>
@@ -204,46 +221,55 @@
 @section('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Modal Detail
     const detailButtons = document.querySelectorAll('.detail-customer');
+    const deleteButtons = document.querySelectorAll('.delete-customer');
+    const deleteForm = document.getElementById('form-delete-customer');
+
     detailButtons.forEach(button => {
         button.addEventListener('click', () => {
+            // Set basic info
             document.getElementById('detail-id').textContent = button.dataset.id || '-';
-            document.getElementById('detail-username').textContent = button.dataset.username;
-            document.getElementById('detail-email').textContent = button.dataset.email;
+            document.getElementById('detail-username').textContent = button.dataset.username || '-';
+            document.getElementById('detail-email').textContent = button.dataset.email || '-';
             document.getElementById('detail-phone').textContent = button.dataset.phone || '-';
-            document.getElementById('detail-orders-count').textContent = button.dataset.ordersCount || 0;
+            document.getElementById('detail-orders-count').textContent = button.dataset.ordersCount || '0';
             document.getElementById('detail-dob').textContent = button.dataset.dob || '-';
+            document.getElementById('detail-gender').textContent = button.dataset.gender || '-';
+            document.getElementById('detail-address').textContent = button.dataset.address || '-';
+            document.getElementById('detail-city').textContent = button.dataset.city || '-';
 
             // Initials
-            const initials = button.dataset.username.split(' ').map(n => n[0]).join('');
-            document.getElementById('detail-initials').textContent = initials;
+            const nameParts = button.dataset.username ? button.dataset.username.split(' ') : [];
+            document.getElementById('detail-initials').textContent = nameParts.length ? nameParts.map(n => n[0]).join('').toUpperCase() : 'NA';
 
             // Recent Transactions
             const container = document.getElementById('detail-recent-transactions');
             container.innerHTML = '';
-            const transactions = JSON.parse(button.dataset.recentTransactions || '[]');
-            transactions.forEach(t => {
-                const div = document.createElement('div');
-                div.className = "flex justify-between items-center p-3 border rounded-lg";
-                div.innerHTML = `
-                    <div>
-                        <p class="font-medium text-gray-800">${t.code}</p>
-                        <p class="text-sm text-gray-500">${t.date}</p>
-                    </div>
-                    <div class="text-right">
-                        <p class="font-semibold text-gray-800">${t.amount}</p>
-                        <span class="text-xs ${t.status === 'Completed' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'} px-2 py-0.5 rounded-full">${t.status}</span>
-                    </div>
-                `;
-                container.appendChild(div);
-            });
+            const transactions = button.dataset.recentTransactions ? JSON.parse(button.dataset.recentTransactions) : [];
+            if(transactions.length === 0){
+                container.innerHTML = '<p class="text-sm text-gray-500">Tidak ada transaksi terbaru.</p>';
+            } else {
+                transactions.forEach(t => {
+                    const div = document.createElement('div');
+                    div.className = "flex justify-between items-center p-3 border rounded-lg";
+                    div.innerHTML = `
+                        <div>
+                            <p class="font-medium text-gray-800">${t.code || '-'}</p>
+                            <p class="text-sm text-gray-500">${t.date || '-'}</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-semibold text-gray-800">${t.amount || '-'}</p>
+                            <span class="text-xs ${t.status === 'Completed' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'} px-2 py-0.5 rounded-full">
+                                ${t.status || '-'}
+                            </span>
+                        </div>
+                    `;
+                    container.appendChild(div);
+                });
+            }
         });
     });
 
-    // Modal Hapus
-    const deleteButtons = document.querySelectorAll('.delete-customer');
-    const deleteForm = document.getElementById('form-delete-customer');
     deleteButtons.forEach(button => {
         button.addEventListener('click', () => {
             deleteForm.action = `/admin/customers/${button.dataset.id}`;

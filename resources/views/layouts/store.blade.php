@@ -53,8 +53,8 @@
                 <ul class="space-y-2 text-green-100">
                     <li><a href="{{ url('/Hygeia') }}" class="hover:text-white">Beranda</a></li>
                     <li><a href="{{ url('/Hygeia/produk') }}" class="hover:text-white">Produk</a></li>
-                    <li><a href="#tentang" class="hover:text-white">Tentang Kami</a></li>
-                    <li><a href="#kontak" class="hover:text-white">Kontak</a></li>
+                    <li><a href="{{ route('store.home') }}#tentang-kami" class="hover:text-white">Tentang Kami</a></li>
+                    <li><a href="{{ route('store.home') }}#kontak" class="hover:text-white">Kontak</a></li>
                 </ul>
             </div>
             <div>

@@ -168,7 +168,7 @@
                 <div class="bg-white rounded-lg shadow-lg p-6 sticky top-28">
                     <h2 class="text-xl font-bold text-gray-800 border-b border-gray-200 pb-4">Ringkasan Pesanan</h2>
 
-                    <form action="{{ route('customer.cart') }}" method="POST" id="checkoutForm">
+                    <form action="{{ route('customer.cart.checkoutSelected') }}" method="POST" id="checkoutForm">
                         @csrf
                         <div id="selectedItemsContainer"></div> <!-- Hidden inputs disini -->
 

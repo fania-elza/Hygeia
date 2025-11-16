@@ -115,7 +115,7 @@
     </section>
 
     <!-- Tentang Kami --> 
-    <section id="tentang" class="py-8 bg-gray-50">
+    <section id="tentang-kami"" class="py-8 bg-gray-50">
         <div class="max-w-6xl mx-auto px-6">
             <div class="w-full text-center mb-8">
                 <h2 class="text-3xl md:text-4xl font-serif font-light text-slate-800 tracking-wide">

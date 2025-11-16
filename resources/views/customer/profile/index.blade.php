@@ -3,26 +3,38 @@
 @section('title', 'Profil Saya')
 
 @section('content')
-<div x-data="{ openEdit: false }" class="container mx-auto p-4 md:p-8 min-h-screen">
+<div class="container mx-auto p-4 md:p-8 min-h-screen">
     <div class="flex flex-col md:flex-row gap-6 md:gap-8">
 
-        {{-- ========== SIDEBAR ========== --}}
+        {{-- SIDEBAR --}}
         <aside class="md:w-1/4 flex-shrink-0">
             <div class="bg-white rounded-xl shadow-lg p-6">
                 
-                {{-- Foto Profil Singkatan Nama --}}
+                {{-- Foto Profil --}}
                 <div class="flex flex-col items-center mb-6">
-                    <div class="w-20 h-20 rounded-full bg-green-500 text-white flex items-center justify-center text-3xl font-bold mb-3">
-                        {{-- Ini sudah benar, menggunakan $user->name --}}
-                        {{ strtoupper(substr($user->name, 0, 2)) }} 
+                    <div class="w-20 h-20 rounded-full overflow-hidden mb-3">
+                        @if($user->profile_photo)
+                            <img src="{{ asset('storage/' . $user->profile_photo) }}" alt="Foto Profil" class="w-full h-full object-cover">
+                        @else
+                            <div class="w-full h-full bg-green-500 text-white flex items-center justify-center text-3xl font-bold">
+                                {{ strtoupper(substr($user->name, 0, 2)) }}
+                            </div>
+                        @endif
                     </div>
-                    {{-- 
-                      * PERBAIKAN 1: 
-                      * Diubah dari $user->username menjadi $user->name 
-                      * agar menampilkan nama lengkap, bukan username.
-                    --}}
-                    <h2 class="text-xl font-semibold text-gray-800">{{ $user->name }}</h2>
+                    <h2 class="text-xl font-semibold text-gray-800">{{ $user->username }}</h2>
                     <p class="text-sm text-gray-500">{{ $user->email }}</p>
+
+                    {{-- Form Upload Foto Profil --}}
+                    <form action="{{ route('store.profile.updatePhoto') }}" method="POST" enctype="multipart/form-data" class="mt-2">
+                        @csrf
+                        <label class="cursor-pointer text-green-600 font-medium hover:underline">
+                            Ubah Foto Profil
+                            <input type="file" name="profile_photo" accept="image/*" class="hidden" onchange="this.form.submit()">
+                        </label>
+                        @error('profile_photo')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
+                    </form>
                 </div>
 
                 {{-- Navigasi --}}
@@ -41,21 +53,9 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="flex items-center gap-3 p-3 rounded-lg text-gray-600 hover:bg-gray-100 hover:text-gray-900">
+                            <a href="{{ route('store.profile.address') }}" class="flex items-center gap-3 p-3 rounded-lg text-gray-600 hover:bg-gray-100 hover:text-gray-900">
                                 <i class="bi bi-geo-alt text-lg"></i>
                                 <span>Alamat Pengiriman</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="flex items-center gap-3 p-3 rounded-lg text-gray-600 hover:bg-gray-100 hover:text-gray-900">
-                                <i class="bi bi-bell text-lg"></i>
-                                <span>Notifikasi</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="flex items-center gap-3 p-3 rounded-lg text-gray-600 hover:bg-gray-100 hover:text-gray-900">
-                                <i class="bi bi-question-circle text-lg"></i>
-                                <span>Bantuan & Dukungan</span>
                             </a>
                         </li>
                     </ul>
@@ -77,7 +77,7 @@
             </div>
         </aside>
 
-        {{-- ========== MAIN CONTENT ========== --}}
+        {{-- MAIN CONTENT --}}
         <main class="md:w-3/4">
             <div class="bg-white rounded-xl shadow-lg p-6 md:p-8">
 
@@ -86,24 +86,11 @@
                     <h1 class="text-3xl font-bold text-gray-800">Profil Saya</h1>
                     <div class="flex gap-2">
                         <button 
-                            @click="openEdit = true" 
+                            id="openEditModal" 
                             class="bg-green-600 text-white px-5 py-2 rounded-lg font-medium hover:bg-green-700 transition duration-200">
                             Edit Profil
                         </button>
-                        <a href="#" class="bg-white text-green-600 border border-green-600 px-5 py-2 rounded-lg font-medium hover:bg-green-50 transition duration-200">
-                            Ubah Password
-                        </a>
                     </div>
-                </div>
-
-                {{-- Foto Profil --}}
-                <div class="flex flex-col items-center my-6 md:my-8">
-                    <div class="w-24 h-24 rounded-full bg-green-500 text-white flex items-center justify-center text-4xl font-bold mb-4">
-                        {{ strtoupper(substr($user->name, 0, 2)) }}
-                    </div>
-                    <a href="#" class="text-green-600 font-medium hover:underline">
-                        Ubah Foto Profil
-                    </a>
                 </div>
 
                 {{-- Informasi User --}}
@@ -111,32 +98,31 @@
                     <div>
                         <label class="block text-sm font-medium text-gray-500 mb-1">Nama Lengkap</label>
                         <div class="bg-gray-50 border border-gray-200 rounded-lg p-3 text-gray-800">
-                             {{-- 
-                              * PERBAIKAN 2: 
-                              * Diubah dari $user->username menjadi $user->name 
-                              * agar menampilkan nama lengkap yang sesuai.
-                            --}}
-                            {{ $user->name }}
+                            {{ $user->username }}
                         </div>
                     </div>
+
                     <div>
                         <label class="block text-sm font-medium text-gray-500 mb-1">Email</label>
                         <div class="bg-gray-50 border border-gray-200 rounded-lg p-3 text-gray-800">
                             {{ $user->email }}
                         </div>
                     </div>
+
                     <div>
                         <label class="block text-sm font-medium text-gray-500 mb-1">Nomor Telepon</label>
                         <div class="bg-gray-50 border border-gray-200 rounded-lg p-3 text-gray-800">
                             {{ $user->contact_number ?? '-' }}
                         </div>
                     </div>
+
                     <div>
                         <label class="block text-sm font-medium text-gray-500 mb-1">Tanggal Lahir</label>
                         <div class="bg-gray-50 border border-gray-200 rounded-lg p-3 text-gray-800">
                             {{ $user->dob ? \Carbon\Carbon::parse($user->dob)->format('d F Y') : '-' }}
                         </div>
                     </div>
+
                     <div>
                         <label class="block text-sm font-medium text-gray-500 mb-1">Jenis Kelamin</label>
                         <div class="bg-gray-50 border border-gray-200 rounded-lg p-3 text-gray-800">
@@ -147,18 +133,18 @@
 
                 <hr class="my-8 border-gray-200">
 
-                {{-- Statistik Akun (Dummy) --}}
+                {{-- Statistik --}}
                 <div class="flex flex-col md:flex-row justify-around items-center text-center gap-6">
                     <div>
-                        <p class="text-3xl font-bold text-green-600">12</p>
+                        <p class="text-3xl font-bold text-green-600">{{ $totalOrders }}</p>
                         <p class="text-sm text-gray-500 mt-1">Total Pesanan</p>
                     </div>
                     <div>
-                        <p class="text-3xl font-bold text-gray-800">8</p>
+                        <p class="text-3xl font-bold text-gray-800">{{ $completedOrders }}</p>
                         <p class="text-sm text-gray-500 mt-1">Pesanan Selesai</p>
                     </div>
                     <div>
-                        <p class="text-3xl font-bold text-yellow-500">2</p>
+                        <p class="text-3xl font-bold text-yellow-500">{{ $processingOrders }}</p>
                         <p class="text-sm text-gray-500 mt-1">Dalam Proses</p>
                     </div>
                 </div>
@@ -167,102 +153,104 @@
         </main>
     </div>
 
-    <div 
-        x-show="openEdit"
-        x-cloak
-        x-transition:enter="ease-out duration-300"
-        x-transition:enter-start="opacity-0"
-        x-transition:enter-end="opacity-100"
-        x-transition:leave="ease-in duration-200"
-        x-transition:leave-start="opacity-100"
-        x-transition:leave-end="opacity-0"
-        {{-- 
-          * PERBAIKAN 4: 
-          * Backdrop diubah dari bg-black/5 menjadi bg-black/50 (atau bg-gray-900/50)
-        --}}
-        class="fixed inset-0 flex items-center justify-center z-50 bg-gray-900/50 p-4">
-
-        <div 
-            @click.away="openEdit = false"
-            x-show="openEdit"
-            x-transition:enter="ease-out duration-300"
-            x-transition:enter-start="opacity-0 scale-95"
-            x-transition:enter-end="opacity-100 scale-100"
-            x-transition:leave="ease-in duration-200"
-            x-transition:leave-start="opacity-100 scale-100"
-            x-transition:leave-end="opacity-0 scale-95"
-            class="bg-white rounded-2xl shadow-xl w-full max-w-2xl p-6 md:p-8">
-
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold text-gray-800">Edit Profil</h2>
-                {{-- PERBAIKAN 6: Tombol close di-style agar lebih rapi --}}
-                <button @click="openEdit = false" class="w-8 h-8 flex items-center justify-center rounded-full text-gray-500 hover:text-gray-800 hover:bg-gray-100 text-2xl leading-none">&times;</button>
-            </div>
-
-            <form action="{{ route('store.profile.update') }}" method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                @csrf
-                @method('PUT')
-
-                <div>
-                    <label class="block text-sm font-medium text-gray-600 mb-1">Nama Lengkap</label>
-                    {{-- 
-                      * PERBAIKAN 3: 
-                      * Value diubah dari $user->username menjadi $user->name 
-                      * agar data yang di-edit adalah data yang benar.
-                    --}}
-                    <input type="text" name="name" value="{{ old('name', $user->name) }}"
-                        class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none">
+    {{-- MODAL EDIT PROFIL --}}
+    <div id="editProfileModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black bg-opacity-50">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto transform transition-all duration-300 scale-95 opacity-0"
+             id="modalContent">
+            <div class="p-6 md:p-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800">Edit Profil</h2>
+                    <button id="closeEditModal" class="w-8 h-8 flex items-center justify-center rounded-full text-gray-500 hover:text-gray-800 hover:bg-gray-100 transition duration-200 text-2xl leading-none">&times;</button>
                 </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-600 mb-1">Email</label>
-                    <input type="email" name="email" value="{{ old('email', $user->email) }}"
-                        class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none">
-                </div>
+                <form action="{{ route('store.profile.update') }}" method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    @csrf
+                    @method('PUT')
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-600 mb-1">Nomor Telepon</label>
-                    <input type="text" name="contact_number" value="{{ old('contact_number', $user->contact_number) }}"
-                        class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none">
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium text-gray-600 mb-1">Tanggal Lahir</label>
-                    <input type="date" name="dob" value="{{ old('dob', $user->dob) }}"
-                        class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none">
-                </div>
-
-                <div class="md:col-span-2">
-                    <label class="block text-sm font-medium text-gray-600 mb-2">Jenis Kelamin</label>
-                    <div class="flex items-center gap-6">
-                        <label class="flex items-center gap-2">
-                            <input type="radio" name="gender" value="Laki-laki" 
-                                class="text-green-600 focus:ring-green-500"
-                                {{ old('gender', $user->gender) === 'Laki-laki' ? 'checked' : '' }}>
-                            Laki-laki
-                        </label>
-                        <label class="flex items-center gap-2">
-                            <input type="radio" name="gender" value="Perempuan" 
-                                class="text-green-600 focus:ring-green-500"
-                                {{ old('gender', $user->gender) === 'Perempuan' ? 'checked' : '' }}>
-                            Perempuan
-                        </label>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">Nama Lengkap</label>
+                        <input type="text" name="username" value="{{ old('username', $user->username) }}" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition duration-200">
                     </div>
-                </div>
 
-                <div class="md:col-span-2 flex justify-end mt-6 gap-3">
-                    <button type="button" 
-                            @click="openEdit = false"
-                            class="border border-gray-300 px-6 py-2 rounded-lg hover:bg-gray-100 transition">
-                        Batal
-                    </button>
-                    <button type="submit" 
-                            class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition">
-                        Simpan Perubahan
-                    </button>
-                </div>
-            </form>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">Email</label>
+                        <input type="email" name="email" value="{{ old('email', $user->email) }}" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition duration-200">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">Nomor Telepon</label>
+                        <input type="text" name="contact_number" value="{{ old('contact_number', $user->contact_number) }}" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition duration-200">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">Tanggal Lahir</label>
+                        <input type="date" name="dob" value="{{ old('dob', $user->dob) }}" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition duration-200">
+                    </div>
+
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-gray-600 mb-2">Jenis Kelamin</label>
+                        <div class="flex items-center gap-6">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="gender" value="male" {{ old('gender', $user->gender) === 'male' ? 'checked' : '' }} class="text-green-600 focus:ring-green-500">
+                                <span class="text-gray-700">Laki-laki</span>
+                            </label>
+
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="gender" value="female" {{ old('gender', $user->gender) === 'female' ? 'checked' : '' }} class="text-green-600 focus:ring-green-500">
+                                <span class="text-gray-700">Perempuan</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="md:col-span-2 flex justify-end mt-6 gap-3">
+                        <button type="button" id="cancelEdit" class="border border-gray-300 px-6 py-2 rounded-lg text-gray-700 hover:bg-gray-50 transition duration-200 font-medium">Batal</button>
+                        <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition duration-200 font-medium">Simpan Perubahan</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('editProfileModal');
+    const modalContent = document.getElementById('modalContent');
+    const openBtn = document.getElementById('openEditModal');
+    const closeBtn = document.getElementById('closeEditModal');
+    const cancelBtn = document.getElementById('cancelEdit');
+
+    function openModal() {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        document.body.classList.add('overflow-hidden');
+        setTimeout(() => {
+            modalContent.classList.remove('scale-95','opacity-0');
+            modalContent.classList.add('scale-100','opacity-100');
+        }, 10);
+    }
+
+    function closeModal() {
+        modalContent.classList.remove('scale-100','opacity-100');
+        modalContent.classList.add('scale-95','opacity-0');
+        setTimeout(() => {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.body.classList.remove('overflow-hidden');
+        }, 300);
+    }
+
+    openBtn.addEventListener('click', openModal);
+    closeBtn.addEventListener('click', closeModal);
+    cancelBtn.addEventListener('click', closeModal);
+
+    modal.addEventListener('click', function(e){
+        if(e.target === modal) closeModal();
+    });
+
+    document.addEventListener('keydown', function(e){
+        if(e.key === 'Escape' && !modal.classList.contains('hidden')) closeModal();
+    });
+});
+</script>
 @endsection
