@@ -68,7 +68,7 @@ class CartController extends Controller
 
         session()->put('cart', $cart);
 
-        return redirect()->route('store.cart')->with('success', "{$product->name} berhasil ditambahkan ke troli!");
+        return redirect()->route('customer.cart')->with('success', "{$product->name} berhasil ditambahkan ke troli!");
     }
 
     /** 🔄 Memperbarui kuantitas item */
@@ -86,7 +86,7 @@ class CartController extends Controller
         session()->put('cart', $cart);
 
         // kirim kembali selected items agar ringkasan tetap sesuai
-        return redirect()->route('store.cart', [
+        return redirect()->route('customer.cart', [
             'selected_items' => $request->input('selected_items', [])
         ])->with('success', 'Kuantitas produk diperbarui.');
     }
@@ -101,19 +101,19 @@ class CartController extends Controller
             unset($cart[$id]);
             session()->put('cart', $cart);
 
-            return redirect()->route('store.cart', [
+            return redirect()->route('customer.cart', [
                 'selected_items' => $request->input('selected_items', [])
             ])->with('success', "{$productName} berhasil dihapus dari troli.");
         }
 
-        return redirect()->route('store.cart')->with('error', 'Produk tidak ditemukan.');
+        return redirect()->route('customer.cart')->with('error', 'Produk tidak ditemukan.');
     }
 
     /** 🧹 Kosongkan troli */
     public function clear()
     {
         session()->forget('cart');
-        return redirect()->route('store.cart')->with('success', 'Troli berhasil dikosongkan.');
+        return redirect()->route('customer.cart')->with('success', 'Troli berhasil dikosongkan.');
     }
 
     /** ✅ Checkout item terpilih */
@@ -130,11 +130,11 @@ class CartController extends Controller
         }
 
         if (empty($selectedProducts)) {
-            return redirect()->route('store.cart')->with('error', 'Pilih minimal satu produk untuk checkout.');
+            return redirect()->route('customer.cart')->with('error', 'Pilih minimal satu produk untuk checkout.');
         }
 
         session()->put('checkout_items', $selectedProducts);
 
-        return redirect()->route('store.checkout.show')->with('success', 'Produk siap checkout.');
+        return redirect()->route('customer.checkout')->with('success', 'Produk siap checkout.');
     }
 }

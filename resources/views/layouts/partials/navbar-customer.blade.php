@@ -27,7 +27,7 @@
             </a>
 
 
-            <a href="{{ route('store.cart') }}">
+            <a href="{{ route('customer.cart') }}">
                 <button type="button" class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-full shadow-md">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 

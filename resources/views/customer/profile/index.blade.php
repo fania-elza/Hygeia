@@ -35,7 +35,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="flex items-center gap-3 p-3 rounded-lg text-gray-600 hover:bg-gray-100 hover:text-gray-900">
+                            <a href="{{ route('store.profile.orders') }}" class="flex items-center gap-3 p-3 rounded-lg text-gray-600 hover:bg-gray-100 hover:text-gray-900">
                                 <i class="bi bi-box-seam text-lg"></i>
                                 <span>Pesanan Saya</span>
                             </a>

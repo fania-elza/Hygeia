@@ -65,9 +65,9 @@
             </a>
 
             {{-- Orders --}}
-            <a href="{{ route('admin.orders') }}"
+            <a href="{{ route('admin.orders.index') }}"
                class="flex items-center space-x-2 py-2 px-4 rounded-md 
-               {{ request()->routeIs('admin.orders') ? 'bg-teal-50 text-teal-700 font-medium' : 'hover:bg-gray-100 text-gray-700' }}">
+               {{ request()->routeIs('admin.orders.index') ? 'bg-teal-50 text-teal-700 font-medium' : 'hover:bg-gray-100 text-gray-700' }}">
                 <i class="bi bi-cart-check-fill"></i>
                 <span>Orders</span>
             </a>

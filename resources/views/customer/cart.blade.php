@@ -93,7 +93,7 @@
 
                                 <div class="flex items-center gap-4">
                                     <!-- Form untuk decrease quantity -->
-                                    <form action="{{ route('store.cart.update', $id) }}" method="POST" class="flex items-center">
+                                    <form action="{{ route('customer.cart.update', $id) }}" method="POST" class="flex items-center">
                                         @csrf
                                         <input type="hidden" name="quantity" value="{{ $item['quantity'] - 1 }}">
                                         <button type="submit" 
@@ -109,7 +109,7 @@
                                     </span>
 
                                     <!-- Form untuk increase quantity -->
-                                    <form action="{{ route('store.cart.update', $id) }}" method="POST" class="flex items-center">
+                                    <form action="{{ route('customer.cart.update', $id) }}" method="POST" class="flex items-center">
                                         @csrf
                                         <input type="hidden" name="quantity" value="{{ $item['quantity'] + 1 }}">
                                         <button type="submit" 
@@ -120,7 +120,7 @@
                                     </form>
 
                                     <!-- Form untuk hapus item -->
-                                    <form action="{{ route('store.cart.remove', $id) }}" method="POST" class="inline">
+                                    <form action="{{ route('customer.cart.remove', $id) }}" method="POST" class="inline">
                                         @csrf
                                         <button type="submit" 
                                             onclick="return confirm('Apakah Anda yakin ingin menghapus \'{{ addslashes($item['name']) }}\' dari keranjang?')"
@@ -148,7 +148,7 @@
                         <!-- Tombol Clear Cart -->
                         @if(count($cartItems) > 0)
                         <div class="flex justify-between items-center pt-4 border-t border-gray-200">
-                            <form action="{{ route('store.cart.clear') }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin mengosongkan seluruh keranjang belanja?')">
+                            <form action="{{ route('customer.cart.clear') }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin mengosongkan seluruh keranjang belanja?')">
                                 @csrf
                                 <button type="submit" class="text-red-600 hover:text-red-800 font-medium flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-red-50 transition duration-200">
                                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
@@ -168,7 +168,7 @@
                 <div class="bg-white rounded-lg shadow-lg p-6 sticky top-28">
                     <h2 class="text-xl font-bold text-gray-800 border-b border-gray-200 pb-4">Ringkasan Pesanan</h2>
 
-                    <form action="{{ route('store.cart.checkoutSelected') }}" method="POST" id="checkoutForm">
+                    <form action="{{ route('customer.cart') }}" method="POST" id="checkoutForm">
                         @csrf
                         <div id="selectedItemsContainer"></div> <!-- Hidden inputs disini -->
 

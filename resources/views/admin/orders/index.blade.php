@@ -2,264 +2,323 @@
 
 @section('content')
 
-<!-- 🔹 SECTION: Statistik Kategori -->
+{{-- SUCCESS & ERROR ALERT --}}
+@if (session('success'))
+    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
+        <span>{{ session('success') }}</span>
+    </div>
+@endif
+
+@if (session('error'))
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+        <span>{{ session('error') }}</span>
+    </div>
+@endif
+
+{{-- STATISTIK --}}
 <section class="bg-white shadow rounded-lg p-6">
     <h3 class="text-xl font-semibold mb-3">Orders Management</h3>
 
-    <div class="grid grid-cols-4 gap-6 mt-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
         <div class="bg-teal-50 border border-teal-200 rounded-lg p-4 text-center">
             <p class="text-sm text-gray-500">Total Orders</p>
-            <h4 class="text-2xl font-bold text-teal-600">1,247</h4>
+            <h4 class="text-2xl font-bold text-teal-600">{{ $totalOrders }}</h4>
         </div>
         <div class="bg-teal-50 border border-teal-200 rounded-lg p-4 text-center">
             <p class="text-sm text-gray-500">Completed Orders</p>
-            <h4 class="text-2xl font-bold text-teal-600">3,891</h4>
+            <h4 class="text-2xl font-bold text-teal-600">{{ $completedOrders }}</h4>
         </div>
         <div class="bg-teal-50 border border-teal-200 rounded-lg p-4 text-center">
             <p class="text-sm text-gray-500">Pending Orders</p>
-            <h4 class="text-2xl font-bold text-teal-600">2,156</h4>
+            <h4 class="text-2xl font-bold text-teal-600">{{ $pendingOrders }}</h4>
         </div>
         <div class="bg-teal-50 border border-teal-200 rounded-lg p-4 text-center">
             <p class="text-sm text-gray-500">Total Revenue</p>
-            <h4 class="text-2xl font-bold text-teal-600">$89,247</h4>
+            <h4 class="text-2xl font-bold text-teal-600">Rp {{ number_format($totalRevenue, 0, ',', '.') }}</h4>
         </div>
     </div>
 </section>
 
-<!-- 🔹 Search & Filter Section -->
-<div class="flex items-center justify-between w-full mx-auto p-2 bg-white rounded-xl border border-gray-200 shadow-sm">
-    <div class="flex items-center space-x-2 w-96">
-        <input 
-            type="text" 
-            placeholder="Search orders......" 
-            class="w-full p-2 border border-gray-200 rounded-lg focus:ring-0 bg-transparent text-sm text-gray-900 placeholder-gray-500">
-        <button type="button" class="flex items-center justify-center bg-teal-500 hover:bg-teal-600 text-white text-sm font-medium rounded-lg px-4 py-2">
-            <svg class="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-            </svg>
-            Search
-        </button>
+{{-- SEARCH + FILTER --}}
+<form action="{{ route('admin.orders.index') }}" method="GET">
+    <div class="flex flex-wrap items-center justify-between w-full mx-auto p-2 my-4 bg-white rounded-xl border border-gray-200 shadow-sm gap-2">
+        <div class="flex items-center space-x-2 flex-grow">
+            <input type="text" name="search" placeholder="Search by Order ID or Customer Name..."
+                value="{{ request('search') }}"
+                class="w-full p-2 border border-gray-200 rounded-lg bg-transparent text-sm text-gray-900 placeholder-gray-500">
+
+            <button type="submit" class="bg-teal-500 hover:bg-teal-600 text-white text-sm font-medium rounded-lg px-4 py-2">
+                Search
+            </button>
+        </div>
+
+        <select name="status" onchange="this.form.submit()"
+            class="ml-2 px-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm font-medium">
+            <option value="">All Status</option>
+            <option value="pending" {{ request('status')=='pending'?'selected':'' }}>Pending</option>
+            <option value="processing" {{ request('status')=='processing'?'selected':'' }}>Processing</option>
+            <option value="completed" {{ request('status')=='completed'?'selected':'' }}>Completed</option>
+            <option value="cancelled" {{ request('status')=='cancelled'?'selected':'' }}>Cancelled</option>
+        </select>
     </div>
+</form>
 
-    <button class="flex items-center justify-center flex-shrink-0 ml-2 px-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-800 hover:bg-gray-50 focus:ring-2 focus:outline-none focus:ring-blue-300">
-        <span>All Status</span>
-        <svg class="w-4 h-4 text-gray-600 ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-        </svg>
-    </button>
-</div>
-
-<!-- 🔹 SECTION: Table -->
+{{-- TABLE --}}
 <section class="bg-white shadow rounded-lg p-6 mt-4">
+    <div class="overflow-x-auto">
+        <table class="min-w-full border border-teal-200 text-left text-sm">
+            <thead class="bg-teal-50 text-center">
+                <tr>
+                    <th class="border px-4 py-2">Order ID</th>
+                    <th class="border px-4 py-2">Customer Name</th>
+                    <th class="border px-4 py-2">Total Amount</th>
+                    <th class="border px-4 py-2">Payment Method</th>
+                    <th class="border px-4 py-2">Status</th>
+                    <th class="border px-4 py-2">Order Date</th>
+                    <th class="border px-4 py-2">Action</th>
+                </tr>
+            </thead>
 
-    <table class="min-w-full border border-teal-200 text-left text-sm">
-        <thead class="bg-teal-50 text-gray-800 text-center">
-            <tr>
-                <th class="border border-gray-300 px-4 py-2">Order ID</th>
-                <th class="border border-gray-300 px-4 py-2">Customer Name</th>
-                <th class="border border-gray-300 px-4 py-2">Total Amount</th>
-                <th class="border border-gray-300 px-4 py-2">Payment Method</th>
-                <th class="border border-gray-300 px-4 py-2">Status</th>
-                <th class="border border-gray-300 px-4 py-2">Payment Method</th>
-                <th class="border border-gray-300 px-4 py-2">Action</th>
-            </tr>
-        </thead>
-        <tbody class="text-center text-gray-700">
-            <tr>
-                <td class="border border-gray-300 px-4 py-2">KT001</td>
-                <td class="border border-gray-300 px-4 py-2">Elektronik</td>
-                <td class="border border-gray-300 px-4 py-2">Peralatan elektronik rumah tangga</td>
-                <td class="border border-gray-300 px-4 py-2">Cash</td>
-                <td class="border border-gray-300 px-4 py-2">45</td>
-                <td class="border border-gray-300 px-4 py-2 text-center">
-                    <span class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-emerald-100 text-emerald-700">
-                        Aktif
-                    </span>
-                </td>                
-                <td class="border border-gray-300 px-4 py-2">
-                    <!-- 🔸 Tombol Detail -->
-                    <button 
-                        data-modal-target="modal-detailorder" 
-                        data-modal-toggle="modal-detailorder"
-                        class="inline-flex items-center justify-center w-8 h-8 rounded-lg 
-                                text-blue-500 hover:text-blue-600 hover:bg-blue-50 
-                                transition-colors duration-200">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 48 48"><defs><mask id="SVG544unEnd"><g fill="#1a1a1a" 
-                            stroke="#fff" stroke-linejoin="round" stroke-width="4"><path d="M24 36c11.046 0 20-12 20-12s-8.954-12-20-12S4 24 4 24s8.954 12 20 12Z"/>
-                            <path d="M24 29a5 5 0 1 0 0-10a5 5 0 0 0 0 10Z"/></g></mask></defs><path fill="#3B82F6" d="M0 0h48v48H0z" mask="url(#SVG544unEnd)"/>
-                        </svg>
-                    </button>
+            <tbody class="text-center">
+                @forelse ($orders as $order)
+                <tr>
+                    <td class="border px-4 py-2 font-medium text-teal-700">{{ $order->id }}</td>
+                    <td class="border px-4 py-2">{{ $order->user->name }}</td>
+                    <td class="border px-4 py-2">Rp {{ number_format($order->total_amount,0,',','.') }}</td>
+                    <td class="border px-4 py-2">{{ $order->payment_method }}</td>
 
-                    <!-- 🔸 Tombol Hapus -->
-                    <button 
-                        data-modal-target="modal-hapuskategori" 
-                        data-modal-toggle="modal-hapuskategori"
-                        class="inline-flex items-center justify-center w-8 h-8 rounded-lg 
-                                text-red-500 hover:text-red-600 hover:bg-red-50 
-                                transition-colors duration-200">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
-                            <path fill="#EF4444" d="M7 21q-.825 0-1.412-.587T5 19V6H4V4h5V3h6v1h5v2h-1v13q0 .825-.587 1.413T17 21zM17 6H7v13h10zM9 17h2V8H9zm4 0h2V8h-2zM7 6v13z"/></svg>
-                    </button>
-                </td>
-            </tr>
-            <tr>
-                <td class="border border-gray-300 px-4 py-2">KT001</td>
-                <td class="border border-gray-300 px-4 py-2">Elektronik</td>
-                <td class="border border-gray-300 px-4 py-2">Peralatan elektronik rumah tangga</td>
-                <td class="border border-gray-300 px-4 py-2">Cash</td>
-                <td class="border border-gray-300 px-4 py-2">45</td>
-                <td class="border border-gray-300 px-4 py-2 text-center">
-                    <span class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-slate-100 text-slate-600">
-                        Nonaktif
-                    </span>
-                </td>                
-                <td class="border border-gray-300 px-4 py-2">
-                    <!-- 🔸 Tombol Edit -->
-                    <button 
-                        data-modal-target="modal-detailorder" 
-                        data-modal-toggle="modal-detailorder"
-                        class="inline-flex items-center justify-center w-8 h-8 rounded-lg 
-                                text-blue-500 hover:text-blue-600 hover:bg-blue-50 
-                                transition-colors duration-200">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 48 48"><defs><mask id="SVG544unEnd"><g fill="#1a1a1a" 
-                            stroke="#fff" stroke-linejoin="round" stroke-width="4"><path d="M24 36c11.046 0 20-12 20-12s-8.954-12-20-12S4 24 4 24s8.954 12 20 12Z"/>
-                            <path d="M24 29a5 5 0 1 0 0-10a5 5 0 0 0 0 10Z"/></g></mask></defs><path fill="#3B82F6" d="M0 0h48v48H0z" mask="url(#SVG544unEnd)"/>
-                        </svg>
-                    </button>
+                    <td class="border px-4 py-2">
+                        @if ($order->status=='completed')
+                            <span class="px-3 py-1.5 rounded-full bg-emerald-100 text-emerald-700">Completed</span>
+                        @elseif ($order->status=='pending')
+                            <span class="px-3 py-1.5 rounded-full bg-yellow-100 text-yellow-700">Pending</span>
+                        @elseif ($order->status=='cancelled')
+                            <span class="px-3 py-1.5 rounded-full bg-red-100 text-red-700">Cancelled</span>
+                        @else
+                            <span class="px-3 py-1.5 rounded-full bg-blue-100 text-blue-700">{{ $order->status }}</span>
+                        @endif
+                    </td>
 
-                    <!-- 🔸 Tombol Hapus -->
-                    <button 
-                        data-modal-target="modal-hapuskategori" 
-                        data-modal-toggle="modal-hapuskategori"
-                        class="inline-flex items-center justify-center w-8 h-8 rounded-lg 
-                                text-red-500 hover:text-red-600 hover:bg-red-50 
-                                transition-colors duration-200">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
-                            <path fill="#EF4444" d="M7 21q-.825 0-1.412-.587T5 19V6H4V4h5V3h6v1h5v2h-1v13q0 .825-.587 1.413T17 21zM17 6H7v13h10zM9 17h2V8H9zm4 0h2V8h-2zM7 6v13z"/></svg>
-                    </button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+                    <td class="border px-4 py-2">{{ $order->created_at->format('d F Y') }}</td>
+
+                    <td class="border px-4 py-2">
+
+                        {{-- BUTTON DETAIL --}}
+                        <button
+                          class="btn-detail w-8 h-8 rounded-lg text-blue-500 hover:bg-blue-50"
+                          data-order='@json([
+                              "id" => $order->id,
+                              "created_at" => $order->created_at->toISOString(),
+                              "payment_method" => $order->payment_method,
+                              "status" => $order->status,
+                              "total_amount" => $order->total_amount,
+
+                              "user" => [
+                                  "name" => $order->user->name,
+                                  "email" => $order->user->email,
+                                  "address" => $order->full_address, // ambil dari orders
+                              ],
+
+                              "order_items" => $order->orderItems->map(function ($item) {
+                                  return [
+                                      "product" => [
+                                          "name" => $item->product->name
+                                      ],
+                                      "quantity" => $item->quantity,
+                                      "price" => $item->price,
+                                  ];
+                              }),
+                          ])'
+                          data-update-url="{{ route('admin.orders.update',$order->id) }}"
+                          data-modal-target="modal-detailorder"
+                          data-modal-toggle="modal-detailorder">
+                          🔍
+                      </button>
+
+
+                        {{-- BUTTON DELETE --}}
+                        <button
+                            class="btn-hapus w-8 h-8 rounded-lg text-red-500 hover:bg-red-50"
+                            data-delete-url="{{ route('admin.orders.destroy',$order->id) }}"
+                            data-modal-target="modal-hapuspesanan"
+                            data-modal-toggle="modal-hapuspesanan">
+                            🗑️
+                        </button>
+
+                    </td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="7" class="border px-4 py-4 text-gray-500">Tidak ada data pesanan.</td>
+                </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+
+    {{-- PAGINATION --}}
+    <div class="mt-6">
+        {{ $orders->appends(request()->query())->links() }}
+    </div>
 </section>
 
-<!-- 🔹 MODAL: Detail Pesanan -->
-<div id="modal-detailorder" class="hidden fixed inset-0 z-50 flex justify-center items-center w-full h-full bg-gray-800/40">
-  <div class="relative p-4 w-full max-w-xl">
-    <div class="relative bg-white rounded-lg shadow-lg">
-      
-      <!-- Header -->
-      <div class="flex items-center justify-between p-4 border-b border-gray-200">
-        <h3 class="text-lg font-semibold text-gray-900">Order Details</h3>
-        <button type="button" data-modal-toggle="modal-detailorder" class="text-gray-400 hover:text-gray-700 rounded-lg p-1">
-          <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1l12 12M13 1L1 13"/>
-          </svg>
-        </button>
-      </div>
+{{-- ==================== MODAL DETAIL ==================== --}}
+<div id="modal-detailorder" class="hidden fixed inset-0 z-50 flex justify-center items-center bg-gray-800/40">
+  <div class="bg-white rounded-lg shadow-lg p-4 w-full max-w-xl">
 
-      <!-- Body -->
-      <div class="p-5 space-y-4">
-        <!-- Order & Customer Info -->
+    <div class="flex justify-between p-4 border-b">
+      <h3 class="font-semibold">Order Details</h3>
+      <button data-modal-hide="modal-detailorder" class="text-gray-500 hover:text-gray-700">✖</button>
+    </div>
+
+    <form id="form-update-status" action="" method="POST">
+      @csrf
+      @method('PUT')
+
+      <div class="p-5 space-y-4 max-h-[70vh] overflow-y-auto">
+
         <div class="bg-teal-50 border border-teal-200 rounded-xl p-5">
-          <div class="grid grid-cols-2 gap-4 text-sm text-gray-700">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+
             <div>
-              <h5 class="text-sm font-semibold mb-1">Order Information</h5>
-              <p><span class="font-medium">Order ID:</span> ORD-001</p>
-              <p><span class="font-medium">Date:</span> 2025-01-15</p>
-              <p><span class="font-medium">Payment:</span> Transfer Bank</p>
+              <h5 class="font-semibold mb-1">Order Information</h5>
+              <p><b>Order ID:</b> <span id="modal-order-id"></span></p>
+              <p><b>Date:</b> <span id="modal-order-date"></span></p>
+              <p><b>Payment:</b> <span id="modal-payment-method"></span></p>
             </div>
+
             <div>
-              <h5 class="text-sm font-semibold mb-1">Customer Information</h5>
-              <p><span class="font-medium">Name:</span> Dr. Sarah Wijaya</p>
-              <p><span class="font-medium">Email:</span> sarah.wijaya@email.com</p>
-              <p><span class="font-medium">Address:</span> Jl. Sudirman No. 123, Jakarta Pusat</p>
+              <h5 class="font-semibold mb-1">Customer Information</h5>
+              <p><b>Name:</b> <span id="modal-customer-name"></span></p>
+              <p><b>Email:</b> <span id="modal-customer-email"></span></p>
+              <p><b>Address:</b> <span id="modal-customer-address"></span></p>
             </div>
+
           </div>
         </div>
 
-        <!-- Ordered Products -->
         <div>
-          <h5 class="text-base font-semibold text-gray-900 mb-2">Ordered Products</h5>
-          <div class="space-y-2">
-            <div class="flex justify-between items-center p-3 bg-gray-50 border border-gray-200 rounded-lg">
-              <div>
-                <p class="font-medium text-gray-800">Paracetamol 500mg</p>
-                <p class="text-sm text-gray-500">Quantity: 2 × Rp 15.000</p>
-              </div>
-              <div class="text-right">
-                <p class="font-semibold text-gray-800">Rp 30.000</p>
-              </div>
-            </div>
-
-            <div class="flex justify-between items-center p-3 bg-gray-50 border border-gray-200 rounded-lg">
-              <div>
-                <p class="font-medium text-gray-800">Vitamin C 1000mg</p>
-                <p class="text-sm text-gray-500">Quantity: 1 × Rp 85.000</p>
-              </div>
-              <div class="text-right">
-                <p class="font-semibold text-gray-800">Rp 85.000</p>
-              </div>
-            </div>
-
-            <div class="flex justify-between items-center p-3 bg-gray-50 border border-gray-200 rounded-lg">
-              <div>
-                <p class="font-medium text-gray-800">Amoxicillin 500mg</p>
-                <p class="text-sm text-gray-500">Quantity: 3 × Rp 45.000</p>
-              </div>
-              <div class="text-right">
-                <p class="font-semibold text-gray-800">Rp 135.000</p>
-              </div>
-            </div>
-          </div>
+          <h5 class="font-semibold mb-2">Ordered Products</h5>
+          <div id="modal-products-list" class="space-y-2"></div>
         </div>
 
-        <!-- Total Amount -->
-        <div class="flex justify-between items-center pt-3 border-t border-gray-200">
-          <p class="font-semibold text-gray-900">Total Amount:</p>
-          <p class="text-lg font-bold text-gray-900">Rp 245.000</p>
+        <div class="flex justify-between pt-3 border-t">
+          <p class="font-semibold">Total:</p>
+          <p id="modal-total-amount" class="font-bold"></p>
         </div>
 
-        <!-- Update Status -->
         <div class="pt-2">
-          <label for="order-status" class="block text-sm font-medium text-gray-700 mb-1">Update Status</label>
-          <select id="order-status" name="status" class="border border-gray-300 rounded-lg text-sm p-2 w-full focus:ring-2 focus:ring-teal-400 focus:outline-none">
-            <option value="Completed" selected>Completed</option>
-            <option value="Processing">Processing</option>
-            <option value="Pending">Pending</option>
-            <option value="Cancelled">Cancelled</option>
+          <label class="font-medium">Update Status</label>
+          <select id="modal-order-status" name="status" class="border rounded-lg p-2 w-full">
+            <option value="completed">Completed</option>
+            <option value="processing">Processing</option>
+            <option value="pending">Pending</option>
+            <option value="cancelled">Cancelled</option>
           </select>
         </div>
+
       </div>
 
-      <!-- Footer -->
-      <div class="flex justify-end items-center gap-3 p-4 border-t border-gray-200">
-        <button data-modal-toggle="modal-detailorder" type="button" class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100">
+      <div class="flex justify-end gap-3 p-4 border-t">
+        <button data-modal-hide="modal-detailorder" type="button" class="px-4 py-2 border rounded-lg">
           Close
         </button>
-        <button type="button" class="px-4 py-2 rounded-lg bg-teal-500 hover:bg-green-700 text-white font-medium">
+        <button type="submit" class="px-4 py-2 bg-teal-500 text-white rounded-lg">
           Save Changes
         </button>
       </div>
-    </div>
+
+    </form>
   </div>
 </div>
 
+{{-- ==================== MODAL DELETE ==================== --}}
+<div id="modal-hapuspesanan" class="hidden fixed inset-0 z-50 flex justify-center items-center bg-gray-800/40">
+  <div class="bg-white rounded-lg shadow-lg p-6 max-w-sm w-full text-center">
 
-<!-- 🔹 MODAL: Konfirmasi Hapus Kategori-->
-<div id="modal-hapuskategori" class="hidden fixed inset-0 z-50 flex justify-center items-center w-full h-full bg-gray-800/40">
-    <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-sm text-center">
-        <h3 class="text-lg font-semibold text-gray-900 mb-3">Hapus Kategori?</h3>
-        <p class="text-sm text-gray-600 mb-5">Apakah Panacea yakin ingin menghapus kategori ini? Tindakan ini tidak dapat dibatalkan.</p>
-        <div class="flex justify-center space-x-3">
-            <button data-modal-toggle="modal-hapuskategori" type="button" class="px-4 py-2 text-sm rounded-lg bg-gray-200 hover:bg-gray-300 text-gray-800">
-                Batal
-            </button>
-            <button type="button" class="px-4 py-2 text-sm rounded-lg bg-red-600 hover:bg-red-700 text-white">
-                Ya, Hapus
-            </button>
-        </div>
-    </div>
+    <h3 class="font-semibold mb-3">Hapus Pesanan?</h3>
+    <p class="text-sm text-gray-600 mb-5">Tindakan ini tidak dapat dibatalkan.</p>
+
+    <form id="form-hapus" method="POST" action="">
+      @csrf
+      @method('DELETE')
+
+      <div class="flex justify-center gap-3">
+        <button data-modal-hide="modal-hapuspesanan" type="button" class="px-4 py-2 bg-gray-200 rounded-lg">
+          Batal
+        </button>
+        <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-lg">
+          Ya, Hapus
+        </button>
+      </div>
+
+    </form>
+  </div>
 </div>
 
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    // Helper format
+    const rupiah = (n) => new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR'}).format(n);
+    const tanggal = (d) => new Date(d).toLocaleDateString('id-ID',{year:'numeric',month:'long',day:'numeric'});
+
+    // MODAL DETAIL =======================
+    document.querySelectorAll('.btn-detail').forEach(btn => {
+        btn.addEventListener('click', () => {
+
+            const data = JSON.parse(btn.dataset.order);
+            const url = btn.dataset.updateUrl;
+
+            document.getElementById('form-update-status').action = url;
+
+            document.getElementById('modal-order-id').textContent = data.id;
+            document.getElementById('modal-order-date').textContent = tanggal(data.created_at);
+            document.getElementById('modal-payment-method').textContent = data.payment_method;
+
+            document.getElementById('modal-customer-name').textContent = data.user?.name ?? 'N/A';
+            document.getElementById('modal-customer-email').textContent = data.user?.email ?? 'N/A';
+            document.getElementById('modal-customer-address').textContent = data.user?.address ?? 'N/A';
+
+            document.getElementById('modal-total-amount').textContent = rupiah(data.total_amount);
+
+            document.getElementById('modal-order-status').value = data.status;
+
+            const list = document.getElementById('modal-products-list');
+            list.innerHTML = "";
+
+            if (data.order_items) {
+                data.order_items.forEach(i => {
+                    list.innerHTML += `
+                        <div class="flex justify-between">
+                            <span>${i.product.name} x ${i.quantity}</span>
+                            <span>${rupiah(i.price * i.quantity)}</span>
+                        </div>
+                    `;
+                });
+            }
+
+            document.getElementById('modal-detailorder').classList.remove('hidden');
+        });
+    });
+
+    // MODAL DELETE ========================
+    document.querySelectorAll('.btn-hapus').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.getElementById('form-hapus').action = btn.dataset.deleteUrl;
+            document.getElementById('modal-hapuspesanan').classList.remove('hidden');
+        });
+    });
+
+    // CLOSE MODAL
+    document.querySelectorAll('[data-modal-hide]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.getElementById(btn.dataset.modalHide).classList.add('hidden');
+        });
+    });
+});
+</script>
+@endpush

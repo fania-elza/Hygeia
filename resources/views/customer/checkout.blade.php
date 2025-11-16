@@ -4,9 +4,8 @@
 
 @section('content')
 <div class="bg-gradient-to-br from-slate-50 to-emerald-50 min-h-screen font-sans">
-    
     <div class="container mx-auto max-w-7xl py-8 px-4 sm:px-6 lg:px-8">
-        
+
         <!-- Header -->
         <div class="text-center mb-4">
             <h1 class="text-3xl font-bold text-slate-800 mb-2">Selesaikan Pesanan</h1>
@@ -26,15 +25,14 @@
         @endif
 
         <div class="container mx-auto px-4 py-8">
-            <form action="{{ route('store.checkout.process') }}" method="POST">
+            <form action="{{ route('store.checkout.process') }}" method="POST" x-data="{ selectedOption: 'saved', selectedAddress: {{ $addresses->first()?->id ?? 'null' }} }">
                 @csrf
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
 
                     <!-- 🧭 Kolom Alamat -->
                     <div class="lg:col-span-2">
-                        <div class="w-full space-y-5"> 
-                            <div class="bg-white rounded-lg shadow-sm border border-slate-100 p-3 sm:p-4 text-[12.5px]" 
-                                x-data="{ selectedOption: 'saved', selectedAddress: 1 }">
+                        <div class="w-full space-y-5">
+                            <div class="bg-white rounded-lg shadow-sm border border-slate-100 p-3 sm:p-4 text-[12.5px]">
                                 
                                 <div class="flex items-center gap-1.5 mb-3">
                                     <div class="w-5 h-5 bg-emerald-100 rounded flex items-center justify-center">
@@ -45,12 +43,12 @@
                                     </div>
                                     <h2 class="text-[13.5px] font-bold text-slate-800">Alamat Pengiriman</h2>
                                 </div>
-                                
-                                <!-- Pilihan: alamat tersimpan / baru -->
+
+                                <!-- Pilihan alamat -->
                                 <div class="space-y-2 mb-3">
                                     <label class="flex items-start gap-2 p-2 rounded-md cursor-pointer transition-all duration-200"
                                         :class="selectedOption === 'saved' ? 'border-2 border-emerald-500 bg-emerald-50' : 'border border-slate-200 hover:border-slate-300'">
-                                        <input type="radio" name="address_option" value="saved" x-model="selectedOption" 
+                                        <input type="radio" name="address_option" value="saved" x-model="selectedOption"
                                             class="mt-0.5 h-3.5 w-3.5 text-emerald-600 focus:ring-emerald-500">
                                         <div>
                                             <span class="font-semibold text-[12.5px]"
@@ -66,7 +64,7 @@
 
                                     <label class="flex items-start gap-2 p-2 rounded-md cursor-pointer transition-all duration-200"
                                         :class="selectedOption === 'new' ? 'border-2 border-emerald-500 bg-emerald-50' : 'border border-slate-200 hover:border-slate-300'">
-                                        <input type="radio" name="address_option" value="new" x-model="selectedOption" 
+                                        <input type="radio" name="address_option" value="new" x-model="selectedOption"
                                             class="mt-0.5 h-3.5 w-3.5 text-emerald-600 focus:ring-emerald-500">
                                         <div>
                                             <span class="font-semibold text-[12.5px]"
@@ -81,77 +79,83 @@
                                     </label>
                                 </div>
 
-                                <!-- Jika pilih alamat tersimpan -->
-                                <div class="space-y-2 pt-3 border-t border-slate-100" 
-                                    x-show="selectedOption === 'saved'" 
-                                    x-transition>
-                                    <div @click="selectedAddress = 1"
-                                        :class="selectedAddress === 1 ? 'border-2 border-emerald-500 bg-green-50' : 'border border-slate-200 hover:border-slate-300 bg-gray-50'"
-                                        class="rounded-md p-2.5 relative group transition-all duration-200 cursor-pointer">
-                                        
-                                        <div class="flex justify-between items-start">
-                                            <div class="flex-1">
-                                                <h3 class="font-semibold text-slate-800 text-[12.5px]">Sarah Johnson</h3>
-                                                <div class="space-y-0.5 text-[11px] text-slate-600"> 
-                                                    <p>+62 812-3456-7890</p>
-                                                    <p>Jl. Sudirman No. 123, Jakarta Pusat</p>
-                                                    <p>Jakarta 10220</p>
+                                <!-- Alamat tersimpan -->
+                                <div x-show="selectedOption === 'saved'" x-transition class="space-y-2 pt-3 border-t border-slate-100">
+                                    @forelse ($addresses as $address)
+                                        <label class="block rounded-md p-2.5 border transition-all duration-200 cursor-pointer"
+                                            :class="selectedAddress == {{ $address->id }} ? 'border-2 border-emerald-500 bg-emerald-50' : 'border border-slate-200 hover:border-slate-300 bg-gray-50'">
+                                            
+                                            <input type="radio" name="selected_address" value="{{ $address->id }}" x-model="selectedAddress" class="hidden">
+
+                                            <!-- Hidden input untuk backend -->
+                                            <input type="hidden" name="receiver_name_{{ $address->id }}" value="{{ $address->receiver_name }}">
+                                            <input type="hidden" name="phone_number_{{ $address->id }}" value="{{ $address->phone_number }}">
+                                            <input type="hidden" name="full_address_{{ $address->id }}" value="{{ $address->full_address }}">
+                                            <input type="hidden" name="city_{{ $address->id }}" value="{{ $address->city }}">
+                                            <input type="hidden" name="postal_code_{{ $address->id }}" value="{{ $address->postal_code }}">
+                                            <input type="hidden" name="notes_{{ $address->id }}" value="{{ $address->notes ?? '' }}">
+
+                                            <div class="flex justify-between items-start">
+                                                <div class="flex-1">
+                                                    <h3 class="font-semibold text-slate-800 text-[12.5px]">{{ $address->receiver_name }}</h3>
+                                                    <div class="space-y-0.5 text-[11px] text-slate-600">
+                                                        <p>{{ $address->phone_number }}</p>
+                                                        <p>{{ $address->full_address }}</p>
+                                                        <p>{{ $address->city }} {{ $address->postal_code }}</p>
+                                                    </div>
                                                 </div>
                                             </div>
+                                        </label>
+                                    @empty
+                                        <p class="text-[11.5px] text-slate-500 italic">
+                                            Belum ada alamat tersimpan. Silakan tambahkan alamat baru.
+                                        </p>
+                                    @endforelse
+                                </div>
+
+                                <!-- Alamat baru -->
+                                <div x-show="selectedOption === 'new'" x-transition class="pt-3 border-t border-slate-100 space-y-3">
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                        <div>
+                                            <label for="receiver_name" class="block text-[12px] font-medium text-slate-700 mb-1">Nama Penerima</label>
+                                            <input type="text" id="receiver_name" name="receiver_name" placeholder="Masukkan nama penerima"
+                                                class="block w-full text-[12.5px] rounded-md border-slate-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500" required>
                                         </div>
+                                        <div>
+                                            <label for="phone_number" class="block text-[12px] font-medium text-slate-700 mb-1">Nomor Telepon</label>
+                                            <input type="text" id="phone_number" name="phone_number" placeholder="+62 812-3456-7890"
+                                                class="block w-full text-[12.5px] rounded-md border-slate-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500" required>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label for="full_address" class="block text-[12px] font-medium text-slate-700 mb-1">Alamat Lengkap</label>
+                                        <textarea id="full_address" name="full_address" rows="3" placeholder="Jl. Sudirman No. 123, RT/RW 01/02"
+                                            class="block w-full text-[12.5px] rounded-md border-slate-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500" required></textarea>
+                                    </div>
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                        <div>
+                                            <label for="city" class="block text-[12px] font-medium text-slate-700 mb-1">Kota / Kabupaten</label>
+                                            <input type="text" id="city" name="city" placeholder="Jakarta"
+                                                class="block w-full text-[12.5px] rounded-md border-slate-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500" required>
+                                        </div>
+                                        <div>
+                                            <label for="postal_code" class="block text-[12px] font-medium text-slate-700 mb-1">Kode Pos</label>
+                                            <input type="text" id="postal_code" name="postal_code" placeholder="10220"
+                                                class="block w-full text-[12.5px] rounded-md border-slate-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500" required>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label for="notes" class="block text-[12px] font-medium text-slate-700 mb-1">Catatan (opsional)</label>
+                                        <input type="text" id="notes" name="notes" placeholder="Catatan untuk kurir (opsional)"
+                                            class="block w-full text-[12.5px] rounded-md border-slate-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500">
                                     </div>
                                 </div>
 
-                                <!-- Jika pilih alamat baru -->
-                                <div class="pt-3 border-t border-slate-100" 
-                                    x-show="selectedOption === 'new'" 
-                                    x-transition>
-                                    <div class="space-y-3">
-                                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                            <div>
-                                                <label for="receiver_name" class="block text-[12px] font-medium text-slate-700 mb-1">Nama Penerima</label>
-                                                <input type="text" id="receiver_name" name="receiver_name" placeholder="Masukkan nama penerima"
-                                                    class="block w-full text-[12.5px] rounded-md border-slate-300 shadow-sm" required>
-                                            </div>
-                                            <div>
-                                                <label for="phone_number" class="block text-[12px] font-medium text-slate-700 mb-1">Nomor Telepon</label>
-                                                <input type="text" id="phone_number" name="phone_number" placeholder="+62 812-3456-7890"
-                                                    class="block w-full text-[12.5px] rounded-md border-slate-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500" required>
-                                            </div>
-                                        </div>
-                                        
-                                        <div>
-                                            <label for="full_address" class="block text-[12px] font-medium text-slate-700 mb-1">Alamat Lengkap</label>
-                                            <textarea id="full_address" name="full_address" rows="3" placeholder="Jl. Sudirman No. 123, RT/RW 01/02"
-                                                    class="block w-full text-[12.5px] rounded-md border-slate-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500" required></textarea>
-                                        </div>
-
-                                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                            <div>
-                                                <label for="city" class="block text-[12px] font-medium text-slate-700 mb-1">Kota / Kabupaten</label>
-                                                <input type="text" id="city" name="city" placeholder="Jakarta"
-                                                    class="block w-full text-[12.5px] rounded-md border-slate-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500" required>
-                                            </div>
-                                            <div>
-                                                <label for="postal_code" class="block text-[12px] font-medium text-slate-700 mb-1">Kode Pos</label>
-                                                <input type="text" id="postal_code" name="postal_code" placeholder="10220"
-                                                    class="block w-full text-[12.5px] rounded-md border-slate-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500" required>
-                                            </div>
-                                        </div>
-
-                                        <div>
-                                            <label for="notes" class="block text-[12px] font-medium text-slate-700 mb-1">Catatan (opsional)</label>
-                                            <input type="text" id="notes" name="notes" placeholder="Catatan untuk kurir (opsional)"
-                                                class="block w-full text-[12.5px] rounded-md border-slate-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500">
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div> 
+                            </div>
                         </div>
-                    </div> 
+                    </div>
 
-                    <!-- 📦 Ringkasan Pesanan -->
+                    <!-- Ringkasan Pesanan -->
                     <div class="lg:col-span-1">
                         <div class="bg-white rounded-xl border border-slate-100 p-4 sticky top-6 shadow-sm">
                             <div class="flex items-center gap-3 mb-4">
@@ -176,6 +180,7 @@
                             </button>
                         </div>
                     </div>
+
                 </div>
             </form>
         </div>

@@ -9,7 +9,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 
 class RegisteredUserController extends Controller
@@ -24,8 +23,6 @@ class RegisteredUserController extends Controller
 
     /**
      * Handle an incoming registration request.
-     *
-     * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request): RedirectResponse
     {
@@ -51,10 +48,10 @@ class RegisteredUserController extends Controller
             'contact_number' => $request->contact_number,
         ]);
 
+        event(new Registered($user));
+
         Auth::login($user);
 
-        return redirect()->route('login')->with('success', 'Registrasi berhasil! Silakan login untuk melanjutkan.');
-
+        return redirect()->route('home')->with('success', 'Registrasi berhasil! Selamat datang.');
     }
-
 }

@@ -20,7 +20,7 @@
                         Dengan menjalin warisan kemurnian dan sains kontemporer, kami menumbuhkan kehidupan yang lebih bermakna.
                     </p>
                     <div class="flex justify-center md:justify-start gap-4 pt-2">
-                        <a href="{{ url('/produk') }}" class="text-white font-bold px-8 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2" 
+                        <a href="{{ url('/login') }}" class="text-white font-bold px-8 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2" 
                         style="background-color: #7EAA8E;">
                             <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 48 48">
                             <defs>

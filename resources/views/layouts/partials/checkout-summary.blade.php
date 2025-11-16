@@ -55,7 +55,7 @@
 
         <!-- Tombol Checkout -->
         <div class="mt-5">
-            <a href="{{ route('store.checkout.payment') }}"
+            <a href="{{ route('customer.payment') }}"
                 class="block w-full bg-green-600 text-white py-2 rounded-lg font-medium text-center hover:bg-green-700 transition">
                 Lanjut ke Pembayaran
             </a>
